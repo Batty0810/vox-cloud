@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/colors_and_type.css">
+<link rel="stylesheet" href="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/styles.css">
+<script src="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:var(--bg-2);-webkit-font-smoothing:antialiased}
+a{color:var(--nymbis-plum);text-decoration:none}
+a:hover{color:var(--nymbis-red);text-decoration:underline}
+table{border-collapse:collapse;width:100%;min-width:700px}
+.tw{overflow-x:auto}
+th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-3);padding:0 14px 9px;white-space:nowrap}
+td{padding:var(--rp,13px) 14px;font-size:14px;border-top:1px solid var(--border-1);vertical-align:middle;white-space:nowrap}
+tbody tr:hover td{background:var(--bg-2)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="display:flex;min-height:100vh;font-family:var(--font-sans);color:var(--fg-1);--rp:{{ rowPad }};--tile:{{ tile }}">
+  <aside style="width:236px;flex:none;background:var(--nymbis-plum-deep);padding:26px 16px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;align-self:flex-start;height:100vh;box-sizing:border-box">
+    <img src="assets/nymbis-white.png" alt="Nymbis" style="width:118px;height:auto;margin:2px 6px 0">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.42);font-variation-settings:'wdth' 112,'wght' 600;padding:0 12px 8px">Reseller desk</div>
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+        <div onClick="{{ n.go }}" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-variation-settings:'wdth' 112,'wght' 600;color:{{ n.fg }};background:{{ n.bg }};transition:background 200ms var(--ease-out)">
+          <span style="width:3px;height:14px;border-radius:2px;flex:none;background:{{ n.bar }}"></span>
+          <span style="flex:1">{{ n.label }}</span>
+          <span style="font-size:11px;font-variation-settings:'wdth' 112,'wght' 600;color:rgba(255,255,255,.5)">{{ n.count }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid rgba(255,255,255,.12)">
+      <span style="width:30px;height:30px;border-radius:999px;flex:none;background:var(--nymbis-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-variation-settings:'wdth' 112,'wght' 700">TM</span>
+      <span style="display:flex;flex-direction:column;line-height:1.3">
+        <span style="font-size:12.5px;color:#fff;font-variation-settings:'wdth' 112,'wght' 600">Thandi Mokoena</span>
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Channel manager</span>
+      </span>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="background:#fff;border-bottom:1px solid var(--border-1);padding:12px 32px;min-height:68px;box-sizing:border-box;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:5">
+      <div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--nymbis-red);font-variation-settings:'wdth' 112,'wght' 600">{{ eyebrow }}</span>
+        <span style="font-size:20px;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.01em">{{ title }}</span>
+      </div>
+      <div style="flex:1 1 300px;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:10px">
+        <input value="{{ query }}" onChange="{{ setQuery }}" placeholder="Search resellers, quotes, task numbers" style="flex:1 1 220px;min-width:0;max-width:300px;box-sizing:border-box;font-family:var(--font-sans);font-size:13.5px;padding:10px 14px;border-radius:999px;border:1.5px solid var(--border-1);background:var(--bg-2);outline:none;color:var(--fg-1)">
+        <span onClick="{{ goNew }}">
+          <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" size="sm" hint-size="auto,34px">Log a meeting</x-import>
+        </span>
+      </div>
+    </header>
+
+    <div style="padding:28px 32px 56px;animation:rise 360ms var(--ease-out)">
+
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Dashboard" style="display:flex;flex-direction:column;gap:24px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <div style="background:var(--tile,#fff);border:1px solid var(--border-1);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);font-variation-settings:'wdth' 112,'wght' 600">{{ s.label }}</span>
+                <span style="font-size:30px;line-height:1.05;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.02em">{{ s.value }}</span>
+                <span style="font-size:12.5px;color:var(--fg-2)">{{ s.sub }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 22px 14px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Meetings this fortnight</span>
+                <a href="#" onClick="{{ goMeetings }}" style="font-size:12.5px">Full log</a>
+              </div>
+              <div style="padding:0 8px 12px;overflow-x:auto">
+                <table style="min-width:720px">
+                  <thead><tr><th>Date</th><th>Reseller</th><th>Type</th><th>Outcome</th><th>Open actions</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{ recentMeetings }}" as="m" hint-placeholder-count="5">
+                      <tr onClick="{{ m.open }}" style="cursor:pointer">
+                        <td style="color:var(--fg-2);white-space:nowrap;font-feature-settings:'tnum' 1">{{ m.date }}</td>
+                        <td style="white-space:nowrap;font-variation-settings:'wdth' 112,'wght' 600">{{ m.reseller }}</td>
+                        <td style="color:var(--fg-2);white-space:nowrap">{{ m.type }}</td>
+                        <td style="color:var(--fg-2);white-space:nowrap">{{ m.outcome }}</td>
+                        <td>
+                          <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.actionTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.actionLabel }}</x-import>
+                        </td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+                  <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Quotes awaiting reseller</span>
+                  <a href="#" onClick="{{ goQuotes }}" style="font-size:12.5px">All quotes</a>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <sc-for list="{{ waitingQuotes }}" as="q" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border-1)">
+                      <span style="font-size:12.5px;font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 600;width:64px;flex:none">{{ q.no }}</span>
+                      <span style="flex:1;min-width:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ q.reseller }}</span>
+                      <span style="flex:none;white-space:nowrap;font-size:13.5px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ q.value }}</span>
+                      <span style="font-size:12px;color:var(--fg-3);width:58px;text-align:right;flex:none">{{ q.age }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </section>
+
+              <section style="background:var(--nymbis-plum-deep);border-radius:var(--radius-lg);padding:20px 22px;color:#fff">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+                  <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Tasks due this week</span>
+                  <a href="#" onClick="{{ goTasks }}" style="font-size:12.5px;color:var(--nymbis-soft-pink)">Queue</a>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <sc-for list="{{ dueTasks }}" as="t" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.14)">
+                      <span style="font-size:12.5px;font-feature-settings:'tnum' 1;color:var(--nymbis-soft-pink);font-variation-settings:'wdth' 112,'wght' 600;width:72px;flex:none">{{ t.no }}</span>
+                      <span style="flex:1;min-width:0;font-size:13.5px;color:rgba(255,255,255,.92);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.title }}</span>
+                      <span style="font-size:12px;color:rgba(255,255,255,.55);flex:none">{{ t.due }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMeetings }}">
+        <div data-screen-label="Meeting log" style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ meetingFilters }}" as="f" hint-placeholder-count="4">
+              <span onClick="{{ f.go }}" style="cursor:pointer;font-size:12.5px;padding:7px 15px;border-radius:999px;border:1.5px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font-variation-settings:'wdth' 112,'wght' 600">{{ f.label }}</span>
+            </sc-for>
+            <span style="margin-left:auto;font-size:12.5px;color:var(--fg-3)">{{ meetingCount }}</span>
+          </div>
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 8px 12px;overflow-x:auto">
+            <table style="min-width:1120px">
+              <thead><tr><th>Date</th><th>Reseller</th><th>Account manager</th><th>Type</th><th>Outcome</th><th>Quotes</th><th>Tasks</th><th>Actions</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ meetings }}" as="m" hint-placeholder-count="8">
+                  <tr onClick="{{ m.open }}" style="cursor:pointer">
+                    <td style="color:var(--fg-2);white-space:nowrap;font-feature-settings:'tnum' 1">{{ m.date }}</td>
+                    <td style="white-space:nowrap;font-variation-settings:'wdth' 112,'wght' 600">{{ m.reseller }}</td>
+                    <td style="color:var(--fg-2)">{{ m.am }}</td>
+                    <td style="color:var(--fg-2)">{{ m.type }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:250px">{{ m.outcome }}</td>
+                    <td style="font-size:12.5px;font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 600">{{ m.quoteRefs }}</td>
+                    <td style="font-size:12.5px;font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ m.taskRefs }}</td>
+                    <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.actionTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.actionLabel }}</x-import></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isMeeting }}">
+        <div data-screen-label="Meeting detail" style="display:flex;flex-direction:column;gap:20px">
+          <a href="#" onClick="{{ goMeetings }}" style="font-size:12.5px">Back to meeting log</a>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:26px 28px;display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--nymbis-red);font-variation-settings:'wdth' 112,'wght' 600">{{ detail.type }} · {{ detail.date }}</span>
+                <span style="font-size:26px;line-height:1.15;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.02em">{{ detail.reseller }}</span>
+                <span style="font-size:13.5px;color:var(--fg-2)">{{ detail.attendees }}</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ detail.actionTone }}" dot="{{ true }}" hint-size="auto,24px">{{ detail.actionLabel }}</x-import>
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="neutral" hint-size="auto,24px">{{ detail.channel }}</x-import>
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="neutral" hint-size="auto,24px">{{ detail.duration }}</x-import>
+              </div>
+              <div style="height:1px;background:var(--border-1)"></div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Notes</span>
+                <sc-for list="{{ detail.notes }}" as="note" hint-placeholder-count="3">
+                  <p style="margin:0;font-size:14.5px;line-height:1.55;color:var(--fg-1)">{{ note }}</p>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Actions agreed</span>
+                <sc-for list="{{ detail.actions }}" as="a" hint-placeholder-count="3">
+                  <div style="display:flex;gap:14px;align-items:flex-start;padding:13px 16px;background:var(--bg-2);border:1px solid var(--border-1);border-radius:var(--radius-md)">
+                    <span style="font-size:12px;font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700;width:74px;flex:none;padding-top:2px">{{ a.no }}</span>
+                    <span style="flex:1;min-width:0;font-size:14px;line-height:1.45">{{ a.text }}</span>
+                    <span style="font-size:12px;color:var(--fg-3);flex:none;text-align:right;width:110px">{{ a.meta }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:15px;font-variation-settings:'wdth' 112,'wght' 700">Account</span>
+                <sc-for list="{{ detail.meta }}" as="row" hint-placeholder-count="5">
+                  <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--border-1);font-size:13.5px">
+                    <span style="color:var(--fg-3)">{{ row.k }}</span>
+                    <span style="text-align:right;font-variation-settings:'wdth' 112,'wght' 600">{{ row.v }}</span>
+                  </div>
+                </sc-for>
+              </section>
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:15px;font-variation-settings:'wdth' 112,'wght' 700">Linked quotes</span>
+                <sc-for list="{{ detail.quotes }}" as="q" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border-1)">
+                    <span style="font-size:12.5px;font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 600;flex:none">{{ q.no }}</span>
+                    <span style="flex:1;min-width:0;font-size:13px;color:var(--fg-2)">{{ q.desc }}</span>
+                    <span style="font-size:13px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600;flex:none">{{ q.value }}</span>
+                  </div>
+                </sc-for>
+                <div style="display:flex;gap:8px;padding-top:4px">
+                  <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="outline" size="sm" hint-size="auto,34px">Attach quote</x-import>
+                  <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="ghost" size="sm" hint-size="auto,34px">Raise task</x-import>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isNew }}">
+        <div data-screen-label="New meeting" style="max-width:820px;display:flex;flex-direction:column;gap:20px">
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:28px 30px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Reseller</span>
+                <select value="{{ form.reseller }}" onChange="{{ setReseller }}" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                  <sc-for list="{{ resellerNames }}" as="r" hint-placeholder-count="8"><option>{{ r }}</option></sc-for>
+                </select>
+              </label>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Account manager</span>
+                <select value="{{ form.am }}" onChange="{{ setAm }}" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                  <sc-for list="{{ amNames }}" as="a" hint-placeholder-count="4"><option>{{ a }}</option></sc-for>
+                </select>
+              </label>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Date" type="date" value="{{ form.date }}" on-change="{{ setDate }}" hint-size="100%,72px"></x-import>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Meeting type</span>
+                <select value="{{ form.type }}" onChange="{{ setType }}" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                  <sc-for list="{{ typeNames }}" as="t" hint-placeholder-count="5"><option>{{ t }}</option></sc-for>
+                </select>
+              </label>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Quote references" placeholder="Q-2418, Q-2431" value="{{ form.quotes }}" on-change="{{ setQuotes }}" helper="Comma-separated. Leave blank if none." hint-size="100%,92px"></x-import>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Task numbers" placeholder="T-10432" value="{{ form.tasks }}" on-change="{{ setTasks }}" helper="Existing tickets discussed." hint-size="100%,92px"></x-import>
+            </div>
+            <label style="display:block">
+              <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Outcome</span>
+              <input value="{{ form.outcome }}" onChange="{{ setOutcome }}" placeholder="One line a colleague could read in a hurry" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+            </label>
+            <label style="display:block">
+              <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Notes</span>
+              <textarea value="{{ form.notes }}" onChange="{{ setNotes }}" rows="6" placeholder="What was discussed, what was committed, what is blocking." style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;line-height:1.5;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1);resize:vertical"></textarea>
+            </label>
+            <div style="display:flex;align-items:center;gap:12px;padding-top:4px">
+              <span onClick="{{ save }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" hint-size="auto,44px">Save meeting</x-import></span>
+              <span onClick="{{ goMeetings }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="ghost" hint-size="auto,44px">Cancel</x-import></span>
+              <span style="margin-left:auto;font-size:12.5px;color:var(--fg-3)">Actions can be raised as tasks after saving.</span>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isQuotes }}">
+        <div data-screen-label="Quotes" style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+            <sc-for list="{{ quoteStats }}" as="s" hint-placeholder-count="3">
+              <div style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-md);padding:16px 18px;display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);font-variation-settings:'wdth' 112,'wght' 600">{{ s.label }}</span>
+                <span style="font-size:22px;font-variation-settings:'wdth' 112,'wght' 700;font-feature-settings:'tnum' 1">{{ s.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 8px 12px;overflow-x:auto">
+            <table style="min-width:1180px">
+              <thead><tr><th>Quote</th><th>Reseller</th><th>Description</th><th>End customer</th><th>Value</th><th>Stage</th><th>Owner</th><th>Raised</th><th>Expires</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="9">
+                  <tr>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700;white-space:nowrap">{{ q.no }}</td>
+                    <td style="white-space:nowrap;font-variation-settings:'wdth' 112,'wght' 600">{{ q.reseller }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px">{{ q.desc }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap">{{ q.customer }}</td>
+                    <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600;white-space:nowrap">{{ q.value }}</td>
+                    <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ q.tone }}" dot="{{ true }}" hint-size="auto,24px">{{ q.stage }}</x-import></td>
+                    <td style="color:var(--fg-2);white-space:nowrap">{{ q.owner }}</td>
+                    <td style="color:var(--fg-3);white-space:nowrap;font-feature-settings:'tnum' 1">{{ q.raised }}</td>
+                    <td style="white-space:nowrap;font-feature-settings:'tnum' 1;color:{{ q.expiryColor }}">{{ q.expires }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isTasks }}">
+        <div data-screen-label="Task queue" style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ taskFilters }}" as="f" hint-placeholder-count="4">
+              <span onClick="{{ f.go }}" style="cursor:pointer;font-size:12.5px;padding:7px 15px;border-radius:999px;border:1.5px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font-variation-settings:'wdth' 112,'wght' 600">{{ f.label }}</span>
+            </sc-for>
+          </div>
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 8px 12px;overflow-x:auto">
+            <table style="min-width:1120px">
+              <thead><tr><th>Task</th><th>Title</th><th>Reseller</th><th>From meeting</th><th>Quote</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="8">
+                  <tr>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700;white-space:nowrap">{{ t.no }}</td>
+                    <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px">{{ t.title }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap;font-variation-settings:'wdth' 112,'wght' 600">{{ t.reseller }}</td>
+                    <td style="color:var(--fg-3);white-space:nowrap;font-feature-settings:'tnum' 1">{{ t.from }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap;font-feature-settings:'tnum' 1">{{ t.quote }}</td>
+                    <td style="color:var(--fg-2);white-space:nowrap">{{ t.owner }}</td>
+                    <td style="white-space:nowrap;font-feature-settings:'tnum' 1;color:{{ t.dueColor }}">{{ t.due }}</td>
+                    <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ t.tone }}" dot="{{ true }}" hint-size="auto,24px">{{ t.status }}</x-import></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isReports }}">
+        <div data-screen-label="Reports" style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Meetings per reseller</span>
+                <span style="font-size:12.5px;color:var(--fg-3)">Rolling 90 days</span>
+              </div>
+              <sc-for list="{{ meetingsByReseller }}" as="r" hint-placeholder-count="8">
+                <div style="display:flex;align-items:center;gap:12px">
+                  <span style="width:126px;flex:none;font-size:13px;color:var(--fg-2)">{{ r.name }}</span>
+                  <span style="flex:1;height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:block">
+                    <span style="display:block;height:100%;border-radius:999px;background:var(--nymbis-gradient);width:{{ r.pct }}"></span>
+                  </span>
+                  <span style="width:22px;flex:none;text-align:right;font-size:13px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ r.count }}</span>
+                </div>
+              </sc-for>
+            </section>
+
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:22px 24px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Quote value by stage</span>
+                <span style="font-size:12.5px;color:var(--fg-3)">Open pipeline, current quarter</span>
+              </div>
+              <sc-for list="{{ valueByStage }}" as="s" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;font-size:13px">
+                    <span style="color:var(--fg-2)">{{ s.stage }}</span>
+                    <span style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ s.value }}</span>
+                  </div>
+                  <span style="height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:block">
+                    <span style="display:block;height:100%;border-radius:999px;background:var(--nymbis-plum);width:{{ s.pct }}"></span>
+                  </span>
+                </div>
+              </sc-for>
+            </section>
+
+            <section style="background:var(--nymbis-plum);border-radius:var(--radius-lg);padding:22px 24px;color:#fff;display:flex;flex-direction:column;gap:16px">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Cadence health</span>
+              <sc-for list="{{ health }}" as="h" hint-placeholder-count="4">
+                <div style="display:flex;flex-direction:column;gap:3px;padding:12px 0;border-top:1px solid rgba(255,255,255,.18)">
+                  <span style="font-size:24px;font-variation-settings:'wdth' 112,'wght' 700;font-feature-settings:'tnum' 1">{{ h.value }}</span>
+                  <span style="font-size:12.5px;color:rgba(255,255,255,.75)">{{ h.label }}</span>
+                </div>
+              </sc-for>
+            </section>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;'comfortable'|'compact'&quot;,&quot;section&quot;:&quot;Table&quot;},&quot;tileStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;plain&quot;,&quot;gradient&quot;],&quot;default&quot;:&quot;plain&quot;,&quot;tsType&quot;:&quot;'plain'|'gradient'&quot;,&quot;section&quot;:&quot;Dashboard&quot;},&quot;showQueueCounts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Navigation&quot;}}">
+const RESELLERS = ['Kestrel IT', 'Sable Networks', 'Meridian Data', 'Overberg Systems', 'Nexa Digital', 'Bluecrane Tech', 'Hexon Managed', 'Tallow Group'];
+const AMS = ['Thandi Mokoena', 'Reuben Fourie', 'Ayesha Patel', 'Dylan Nkosi'];
+const TYPES = ['Quarterly review', 'Pipeline check-in', 'Technical scoping', 'Onboarding', 'Escalation'];
+
+const MEETINGS = [
+  { id: 'm1', date: '08 Sep 2026', reseller: 'Kestrel IT', am: 'Thandi Mokoena', type: 'Quarterly review', channel: 'On site, Century City', duration: '90 min',
+    outcome: 'Committed to Veeam bundle for two end customers', open: 2, quoteRefs: 'Q-2418, Q-2431', taskRefs: 'T-10432, T-10440',
+    attendees: 'Marc Delport (MD), Simone Adams (technical lead) · Nymbis: Thandi Mokoena, Dylan Nkosi',
+    notes: [
+      'Kestrel are consolidating three separate backup contracts onto one Nymbis-hosted Veeam tenancy. Marc wants a single monthly invoice per end customer rather than a per-workload breakdown, which is how they bill their own clients.',
+      'Simone raised the restore-time expectation on the Q-2418 workload set. Current target is four hours; she needs two for the medical practice group. We agreed to quote a second tier rather than change the existing quote.',
+      'They will not move the disaster-recovery piece this quarter. Budget sits with the end customer and only reopens in January.'
+    ],
+    actions: [
+      { no: 'T-10432', text: 'Issue tiered restore-time option against Q-2418', meta: 'Dylan Nkosi · 11 Sep' },
+      { no: 'T-10440', text: 'Confirm consolidated billing format with finance', meta: 'Thandi Mokoena · 15 Sep' },
+      { no: '—', text: 'Diarise DR conversation for January budget cycle', meta: 'Closed' }
+    ],
+    quotes: [
+      { no: 'Q-2418', desc: 'Veeam Cloud Connect, 34 workloads', value: 'R 218 400' },
+      { no: 'Q-2431', desc: 'Tiered restore add-on', value: 'R 46 900' }
+    ],
+    meta: [
+      { k: 'Account manager', v: 'Thandi Mokoena' },
+      { k: 'Tier', v: 'Gold reseller' },
+      { k: 'Since', v: 'Mar 2023' },
+      { k: 'Open quote value', v: 'R 265 300' },
+      { k: 'Last meeting', v: '12 Jun 2026' },
+      { k: 'Cadence', v: 'Quarterly' }
+    ] },
+  { id: 'm2', date: '04 Sep 2026', reseller: 'Sable Networks', am: 'Reuben Fourie', type: 'Escalation', channel: 'Teams call', duration: '45 min',
+    outcome: 'Migration window missed, replan agreed', open: 3, quoteRefs: 'Q-2402', taskRefs: 'T-10419, T-10421, T-10428',
+    attendees: 'Nadia Roux (ops manager) · Nymbis: Reuben Fourie',
+    notes: [
+      'The 30 August cutover did not happen. Sable had not completed the firewall changes on their side and our engineer stood down after two hours.',
+      'Nadia accepts the delay sat with them but asked for the rescheduled window to be free of charge. Reuben agreed to waive the standby fee once.',
+      'New window is 19 September, 22:00 to 04:00. Pre-flight checklist to be signed off 48 hours before.'
+    ],
+    actions: [
+      { no: 'T-10419', text: 'Rebook engineer for 19 Sep cutover window', meta: 'Reuben Fourie · 10 Sep' },
+      { no: 'T-10421', text: 'Send pre-flight checklist and get written sign-off', meta: 'Ayesha Patel · 17 Sep' },
+      { no: 'T-10428', text: 'Credit standby fee on September invoice', meta: 'Finance · 25 Sep' }
+    ],
+    quotes: [{ no: 'Q-2402', desc: 'Managed migration, 12 servers', value: 'R 132 750' }],
+    meta: [
+      { k: 'Account manager', v: 'Reuben Fourie' },
+      { k: 'Tier', v: 'Silver reseller' },
+      { k: 'Since', v: 'Aug 2024' },
+      { k: 'Open quote value', v: 'R 132 750' },
+      { k: 'Last meeting', v: '21 Aug 2026' },
+      { k: 'Cadence', v: 'Monthly' }
+    ] },
+  { id: 'm3', date: '02 Sep 2026', reseller: 'Meridian Data', am: 'Ayesha Patel', type: 'Technical scoping', channel: 'On site, Sandton', duration: '2 hr',
+    outcome: 'Storage sizing agreed, quote to follow', open: 1, quoteRefs: '—', taskRefs: 'T-10425',
+    attendees: 'Pieter van Wyk (CTO) · Nymbis: Ayesha Patel',
+    notes: [
+      'Meridian need 180 TB of object storage for a media archive, growing roughly 4 TB a month. Retrieval is infrequent but must be complete within 24 hours.',
+      'Pieter asked whether they can resell the storage under their own brand. Referred to the white-label addendum; he will read it before quoting.'
+    ],
+    actions: [
+      { no: 'T-10425', text: 'Draft 180 TB object storage quote with growth schedule', meta: 'Ayesha Patel · 12 Sep' }
+    ],
+    quotes: [],
+    meta: [
+      { k: 'Account manager', v: 'Ayesha Patel' },
+      { k: 'Tier', v: 'Silver reseller' },
+      { k: 'Since', v: 'Jan 2026' },
+      { k: 'Open quote value', v: '—' },
+      { k: 'Last meeting', v: '14 Aug 2026' },
+      { k: 'Cadence', v: 'Monthly' }
+    ] },
+  { id: 'm4', date: '28 Aug 2026', reseller: 'Overberg Systems', am: 'Dylan Nkosi', type: 'Pipeline check-in', channel: 'Teams call', duration: '30 min',
+    outcome: 'Two quotes stalled at end customer', open: 1, quoteRefs: 'Q-2388, Q-2395', taskRefs: 'T-10402',
+    attendees: 'Elmarie Botha (sales director) · Nymbis: Dylan Nkosi',
+    notes: [
+      'Both open quotes are sitting with the same end customer, a municipality, and are waiting on a procurement committee that meets fortnightly.',
+      'Elmarie asked for the quotes to be re-dated rather than expired so the paperwork stays clean.'
+    ],
+    actions: [{ no: 'T-10402', text: 'Re-date Q-2388 and Q-2395, extend validity 30 days', meta: 'Dylan Nkosi · 09 Sep' }],
+    quotes: [
+      { no: 'Q-2388', desc: 'Hosted DR, 8 VMs', value: 'R 88 200' },
+      { no: 'Q-2395', desc: 'Backup for M365, 240 seats', value: 'R 61 440' }
+    ],
+    meta: [
+      { k: 'Account manager', v: 'Dylan Nkosi' },
+      { k: 'Tier', v: 'Gold reseller' },
+      { k: 'Since', v: 'Nov 2022' },
+      { k: 'Open quote value', v: 'R 149 640' },
+      { k: 'Last meeting', v: '31 Jul 2026' },
+      { k: 'Cadence', v: 'Monthly' }
+    ] },
+  { id: 'm5', date: '25 Aug 2026', reseller: 'Nexa Digital', am: 'Thandi Mokoena', type: 'Onboarding', channel: 'On site, Durban', duration: '3 hr',
+    outcome: 'Portal access issued, first quote raised', open: 0, quoteRefs: 'Q-2380', taskRefs: '—',
+    attendees: 'Kagiso Mahlangu (founder), Lerato Sithole (ops) · Nymbis: Thandi Mokoena',
+    notes: [
+      'Onboarding completed in one session. PortKey access issued to both named contacts and the support escalation path walked through.',
+      'First opportunity is a 60-seat backup deal closing this month. Quote raised on the day.'
+    ],
+    actions: [],
+    quotes: [{ no: 'Q-2380', desc: 'M365 backup, 60 seats', value: 'R 15 360' }],
+    meta: [
+      { k: 'Account manager', v: 'Thandi Mokoena' },
+      { k: 'Tier', v: 'Bronze reseller' },
+      { k: 'Since', v: 'Aug 2026' },
+      { k: 'Open quote value', v: 'R 15 360' },
+      { k: 'Last meeting', v: '—' },
+      { k: 'Cadence', v: 'Fortnightly' }
+    ] },
+  { id: 'm6', date: '20 Aug 2026', reseller: 'Bluecrane Tech', am: 'Reuben Fourie', type: 'Quarterly review', channel: 'Teams call', duration: '60 min',
+    outcome: 'Renewal confirmed, no growth this quarter', open: 0, quoteRefs: 'Q-2361', taskRefs: '—',
+    attendees: 'Johan Steyn (MD) · Nymbis: Reuben Fourie',
+    notes: [
+      'Bluecrane will renew the existing tenancy at the same commitment. Johan was clear that they are not chasing new backup business until their own hiring completes.',
+      'Worth revisiting in November when their new sales hire starts.'
+    ],
+    actions: [],
+    quotes: [{ no: 'Q-2361', desc: 'Annual tenancy renewal', value: 'R 204 000' }],
+    meta: [
+      { k: 'Account manager', v: 'Reuben Fourie' },
+      { k: 'Tier', v: 'Gold reseller' },
+      { k: 'Since', v: 'Feb 2021' },
+      { k: 'Open quote value', v: 'R 204 000' },
+      { k: 'Last meeting', v: '19 May 2026' },
+      { k: 'Cadence', v: 'Quarterly' }
+    ] },
+  { id: 'm7', date: '14 Aug 2026', reseller: 'Hexon Managed', am: 'Ayesha Patel', type: 'Pipeline check-in', channel: 'Teams call', duration: '30 min',
+    outcome: 'Lost the healthcare deal on price', open: 1, quoteRefs: 'Q-2354', taskRefs: 'T-10388',
+    attendees: 'Fatima Ismail (account lead) · Nymbis: Ayesha Patel',
+    notes: [
+      'The healthcare group went with an incumbent at roughly 18% below our quote. Fatima felt the restore SLA was not enough of a differentiator to carry the gap.',
+      'Asked us to produce a short comparison sheet she can use in the next bid.'
+    ],
+    actions: [{ no: 'T-10388', text: 'Build SLA comparison one-pager for reseller use', meta: 'Ayesha Patel · 19 Sep' }],
+    quotes: [{ no: 'Q-2354', desc: 'Immutable backup, 22 workloads', value: 'R 176 800' }],
+    meta: [
+      { k: 'Account manager', v: 'Ayesha Patel' },
+      { k: 'Tier', v: 'Silver reseller' },
+      { k: 'Since', v: 'Jun 2024' },
+      { k: 'Open quote value', v: '—' },
+      { k: 'Last meeting', v: '10 Jul 2026' },
+      { k: 'Cadence', v: 'Monthly' }
+    ] },
+  { id: 'm8', date: '11 Aug 2026', reseller: 'Tallow Group', am: 'Dylan Nkosi', type: 'Technical scoping', channel: 'On site, Pretoria', duration: '75 min',
+    outcome: 'Scoping done, waiting on their architect', open: 2, quoteRefs: '—', taskRefs: 'T-10375, T-10379',
+    attendees: 'Sipho Dube (solutions architect) · Nymbis: Dylan Nkosi, Ayesha Patel',
+    notes: [
+      'Tallow want a hybrid setup: production on premise, backup and DR with Nymbis. Sipho needs to confirm the network path before we can size the pipe.',
+      'Nothing to quote until that lands.'
+    ],
+    actions: [
+      { no: 'T-10375', text: 'Chase network path confirmation from Sipho', meta: 'Dylan Nkosi · 12 Sep' },
+      { no: 'T-10379', text: 'Prepare hybrid reference architecture', meta: 'Ayesha Patel · 22 Sep' }
+    ],
+    quotes: [],
+    meta: [
+      { k: 'Account manager', v: 'Dylan Nkosi' },
+      { k: 'Tier', v: 'Bronze reseller' },
+      { k: 'Since', v: 'Apr 2025' },
+      { k: 'Open quote value', v: '—' },
+      { k: 'Last meeting', v: '06 Jun 2026' },
+      { k: 'Cadence', v: 'Quarterly' }
+    ] }
+];
+
+const STAGE_TONE = { Draft: 'neutral', Sent: 'info', 'In review': 'atRisk', Won: 'healthy', Lost: 'critical', Expired: 'critical' };
+
+const QUOTES = [
+  { no: 'Q-2431', reseller: 'Kestrel IT', desc: 'Tiered restore add-on', customer: 'Medical practice group', value: 'R 46 900', stage: 'Draft', owner: 'Dylan Nkosi', raised: '08 Sep', expires: '08 Oct', urgent: false, age: '1 day' },
+  { no: 'Q-2418', reseller: 'Kestrel IT', desc: 'Veeam Cloud Connect, 34 workloads', customer: 'Consolidated', value: 'R 218 400', stage: 'Sent', owner: 'Thandi Mokoena', raised: '26 Aug', expires: '25 Sep', urgent: true, age: '14 days' },
+  { no: 'Q-2402', reseller: 'Sable Networks', desc: 'Managed migration, 12 servers', customer: 'Cape Fisheries', value: 'R 132 750', stage: 'In review', owner: 'Reuben Fourie', raised: '19 Aug', expires: '18 Sep', urgent: true, age: '21 days' },
+  { no: 'Q-2395', reseller: 'Overberg Systems', desc: 'Backup for M365, 240 seats', customer: 'Local municipality', value: 'R 61 440', stage: 'In review', owner: 'Dylan Nkosi', raised: '05 Aug', expires: '09 Oct', urgent: false, age: '35 days' },
+  { no: 'Q-2388', reseller: 'Overberg Systems', desc: 'Hosted DR, 8 VMs', customer: 'Local municipality', value: 'R 88 200', stage: 'In review', owner: 'Dylan Nkosi', raised: '01 Aug', expires: '09 Oct', urgent: false, age: '39 days' },
+  { no: 'Q-2380', reseller: 'Nexa Digital', desc: 'M365 backup, 60 seats', customer: 'Zenith Legal', value: 'R 15 360', stage: 'Sent', owner: 'Thandi Mokoena', raised: '25 Aug', expires: '24 Sep', urgent: true, age: '15 days' },
+  { no: 'Q-2372', reseller: 'Meridian Data', desc: 'Object storage, 40 TB pilot', customer: 'Broadcast client', value: 'R 52 000', stage: 'Won', owner: 'Ayesha Patel', raised: '17 Jul', expires: '—', urgent: false, age: '—' },
+  { no: 'Q-2361', reseller: 'Bluecrane Tech', desc: 'Annual tenancy renewal', customer: 'Own platform', value: 'R 204 000', stage: 'Won', owner: 'Reuben Fourie', raised: '10 Jul', expires: '—', urgent: false, age: '—' },
+  { no: 'Q-2354', reseller: 'Hexon Managed', desc: 'Immutable backup, 22 workloads', customer: 'Healthcare group', value: 'R 176 800', stage: 'Lost', owner: 'Ayesha Patel', raised: '02 Jul', expires: '—', urgent: false, age: '—' }
+];
+
+const STATUS_TONE = { Open: 'info', 'In progress': 'info', Blocked: 'critical', Done: 'healthy', Overdue: 'critical' };
+
+const TASKS = [
+  { no: 'T-10432', title: 'Issue tiered restore-time option against Q-2418', reseller: 'Kestrel IT', from: '08 Sep', quote: 'Q-2418', owner: 'Dylan Nkosi', due: '11 Sep', status: 'In progress', urgent: true },
+  { no: 'T-10440', title: 'Confirm consolidated billing format with finance', reseller: 'Kestrel IT', from: '08 Sep', quote: '—', owner: 'Thandi Mokoena', due: '15 Sep', status: 'Open', urgent: false },
+  { no: 'T-10419', title: 'Rebook engineer for 19 Sep cutover window', reseller: 'Sable Networks', from: '04 Sep', quote: 'Q-2402', owner: 'Reuben Fourie', due: '10 Sep', status: 'In progress', urgent: true },
+  { no: 'T-10421', title: 'Send pre-flight checklist and get written sign-off', reseller: 'Sable Networks', from: '04 Sep', quote: 'Q-2402', owner: 'Ayesha Patel', due: '17 Sep', status: 'Open', urgent: false },
+  { no: 'T-10428', title: 'Credit standby fee on September invoice', reseller: 'Sable Networks', from: '04 Sep', quote: '—', owner: 'Finance', due: '25 Sep', status: 'Open', urgent: false },
+  { no: 'T-10425', title: 'Draft 180 TB object storage quote with growth schedule', reseller: 'Meridian Data', from: '02 Sep', quote: '—', owner: 'Ayesha Patel', due: '12 Sep', status: 'In progress', urgent: true },
+  { no: 'T-10402', title: 'Re-date Q-2388 and Q-2395, extend validity 30 days', reseller: 'Overberg Systems', from: '28 Aug', quote: 'Q-2395', owner: 'Dylan Nkosi', due: '09 Sep', status: 'Overdue', urgent: true },
+  { no: 'T-10388', title: 'Build SLA comparison one-pager for reseller use', reseller: 'Hexon Managed', from: '14 Aug', quote: 'Q-2354', owner: 'Ayesha Patel', due: '19 Sep', status: 'Blocked', urgent: false },
+  { no: 'T-10375', title: 'Chase network path confirmation from Sipho', reseller: 'Tallow Group', from: '11 Aug', quote: '—', owner: 'Dylan Nkosi', due: '12 Sep', status: 'Open', urgent: false },
+  { no: 'T-10379', title: 'Prepare hybrid reference architecture', reseller: 'Tallow Group', from: '11 Aug', quote: '—', owner: 'Ayesha Patel', due: '22 Sep', status: 'Open', urgent: false }
+];
+
+const SCREENS = [
+  { id: 'dashboard', label: 'Dashboard', eyebrow: 'Reseller desk', title: 'This week' },
+  { id: 'meetings', label: 'Meeting log', eyebrow: 'Meetings', title: 'Meeting log' },
+  { id: 'quotes', label: 'Quotes', eyebrow: 'Pipeline', title: 'Quotes' },
+  { id: 'tasks', label: 'Task queue', eyebrow: 'Work', title: 'Task queue' },
+  { id: 'reports', label: 'Reports', eyebrow: 'Reporting', title: 'Channel reports' }
+];
+
+class Component extends DCLogic {
+  state = {
+    screen: 'dashboard',
+    meetingId: 'm1',
+    query: '',
+    meetingFilter: 'All',
+    taskFilter: 'Open',
+    extra: [],
+    form: { reseller: 'Kestrel IT', am: 'Thandi Mokoena', date: '2026-09-09', type: 'Quarterly review', quotes: '', tasks: '', outcome: '', notes: '' }
+  };
+
+  go = (screen) => () => this.setState({ screen });
+  openMeeting = (id) => () => this.setState({ screen: 'meeting', meetingId: id });
+  setField = (k) => (e) => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } }));
+
+  save = () => {
+    const f = this.state.form;
+    const d = new Date(f.date + 'T00:00:00');
+    const date = isNaN(d) ? '09 Sep 2026' : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const m = {
+      id: 'new' + this.state.extra.length,
+      date, reseller: f.reseller, am: f.am, type: f.type,
+      outcome: f.outcome || 'No outcome recorded',
+      open: 0,
+      quoteRefs: f.quotes || '—',
+      taskRefs: f.tasks || '—',
+      channel: 'Not recorded', duration: '—',
+      attendees: 'Attendees not recorded',
+      notes: f.notes ? f.notes.split('\n').filter(Boolean) : ['No notes recorded.'],
+      actions: [], quotes: [],
+      meta: [{ k: 'Account manager', v: f.am }, { k: 'Logged', v: date }]
+    };
+    this.setState(s => ({ extra: [m, ...s.extra], screen: 'meetings', form: { ...s.form, outcome: '', notes: '', quotes: '', tasks: '' } }));
+  };
+
+  allMeetings() { return [...this.state.extra, ...MEETINGS]; }
+
+  renderVals() {
+    const p = this.props;
+    const screen = this.state.screen;
+    const active = SCREENS.find(s => s.id === screen);
+    const showCounts = p.showQueueCounts ?? true;
+
+    const dec = (m) => ({
+      ...m,
+      actionTone: m.open === 0 ? 'healthy' : m.open > 2 ? 'critical' : 'atRisk',
+      actionLabel: m.open === 0 ? 'Clear' : m.open + ' open',
+      open: this.openMeeting(m.id)
+    });
+
+    const all = this.allMeetings().map(dec);
+    const q = this.state.query.trim().toLowerCase();
+    const matches = (m) => !q || (m.reseller + ' ' + m.am + ' ' + m.quoteRefs + ' ' + m.taskRefs + ' ' + m.outcome).toLowerCase().includes(q);
+
+    const mf = this.state.meetingFilter;
+    const meetings = all.filter(matches).filter(m => mf === 'All' || (mf === 'Open actions' ? m.actionLabel !== 'Clear' : m.type === mf));
+
+    const tf = this.state.taskFilter;
+    const tasks = TASKS
+      .filter(t => !q || (t.no + ' ' + t.title + ' ' + t.reseller + ' ' + t.quote + ' ' + t.owner).toLowerCase().includes(q))
+      .filter(t => tf === 'All' || (tf === 'Open' ? t.status !== 'Done' : tf === 'Mine' ? t.owner === 'Thandi Mokoena' : t.status === tf))
+      .map(t => ({ ...t, tone: STATUS_TONE[t.status] || 'neutral', dueColor: t.urgent ? 'var(--nymbis-red)' : 'var(--fg-2)' }));
+
+    const quotes = QUOTES
+      .filter(x => !q || (x.no + ' ' + x.reseller + ' ' + x.desc + ' ' + x.customer + ' ' + x.owner).toLowerCase().includes(q))
+      .map(x => ({ ...x, tone: STAGE_TONE[x.stage] || 'neutral', expiryColor: x.urgent ? 'var(--nymbis-red)' : 'var(--fg-3)' }));
+
+    const detail = all.find(m => m.id === this.state.meetingId) || all[0];
+
+    const chip = (label, on, fn) => ({
+      label, go: fn,
+      bg: on ? 'var(--nymbis-plum)' : '#fff',
+      fg: on ? '#fff' : 'var(--fg-2)',
+      border: on ? 'var(--nymbis-plum)' : 'var(--border-1)'
+    });
+
+    const openTaskCount = TASKS.filter(t => t.status !== 'Done').length;
+    const openQuoteCount = QUOTES.filter(x => x.stage === 'Sent' || x.stage === 'In review' || x.stage === 'Draft').length;
+    const counts = { quotes: openQuoteCount, tasks: openTaskCount };
+
+    const byReseller = RESELLERS.map(name => ({ name, count: [3, 4, 2, 5, 1, 2, 3, 2][RESELLERS.indexOf(name)] }));
+    const maxC = Math.max(...byReseller.map(r => r.count));
+
+    const stageTotals = [
+      { stage: 'Draft', n: 46900 },
+      { stage: 'Sent', n: 233760 },
+      { stage: 'In review', n: 282390 },
+      { stage: 'Won', n: 256000 },
+      { stage: 'Lost', n: 176800 }
+    ];
+    const maxV = Math.max(...stageTotals.map(s => s.n));
+    const fmt = (n) => 'R ' + n.toLocaleString('en-ZA').replace(/,/g, ' ');
+
+    return {
+      nav: SCREENS.map(s => ({
+        label: s.label,
+        go: this.go(s.id),
+        count: showCounts && counts[s.id] ? String(counts[s.id]) : '',
+        bg: (screen === s.id || (s.id === 'meetings' && screen === 'meeting')) ? 'rgba(255,255,255,.10)' : 'transparent',
+        fg: (screen === s.id || (s.id === 'meetings' && screen === 'meeting')) ? '#fff' : 'rgba(255,255,255,.62)',
+        bar: (screen === s.id || (s.id === 'meetings' && screen === 'meeting')) ? 'var(--nymbis-red)' : 'transparent'
+      })),
+
+      eyebrow: screen === 'meeting' ? 'Meetings' : screen === 'new' ? 'Meetings' : (active ? active.eyebrow : 'Reseller desk'),
+      title: screen === 'meeting' ? detail.reseller : screen === 'new' ? 'Log a meeting' : (active ? active.title : ''),
+
+      query: this.state.query,
+      setQuery: (e) => this.setState({ query: e.target.value }),
+
+      isDashboard: screen === 'dashboard',
+      isMeetings: screen === 'meetings',
+      isMeeting: screen === 'meeting',
+      isNew: screen === 'new',
+      isQuotes: screen === 'quotes',
+      isTasks: screen === 'tasks',
+      isReports: screen === 'reports',
+
+      goMeetings: this.go('meetings'),
+      goQuotes: this.go('quotes'),
+      goTasks: this.go('tasks'),
+      goNew: this.go('new'),
+
+      rowPad: (p.density ?? 'comfortable') === 'compact' ? '8px' : '13px',
+      tile: (p.tileStyle ?? 'plain') === 'gradient' ? 'linear-gradient(160deg,#FFF6F4 0%,#FDF0F6 100%)' : '#fff',
+
+      stats: [
+        { label: 'Meetings logged', value: '6', sub: 'Last 14 days, 5 resellers' },
+        { label: 'Open quote value', value: 'R 563k', sub: '6 quotes awaiting a decision' },
+        { label: 'Tasks open', value: String(openTaskCount), sub: '1 overdue, 1 blocked' },
+        { label: 'Resellers untouched', value: '2', sub: 'No contact in 30 days' }
+      ],
+      recentMeetings: all.slice(0, 5),
+      waitingQuotes: QUOTES.filter(x => x.stage === 'Sent' || x.stage === 'In review').slice(0, 4),
+      dueTasks: TASKS.filter(t => t.urgent).slice(0, 4),
+
+      meetings,
+      meetingCount: meetings.length + ' of ' + all.length + ' meetings',
+      meetingFilters: [
+        chip('All', mf === 'All', () => this.setState({ meetingFilter: 'All' })),
+        chip('Open actions', mf === 'Open actions', () => this.setState({ meetingFilter: 'Open actions' })),
+        chip('Quarterly review', mf === 'Quarterly review', () => this.setState({ meetingFilter: 'Quarterly review' })),
+        chip('Escalation', mf === 'Escalation', () => this.setState({ meetingFilter: 'Escalation' })),
+        chip('Technical scoping', mf === 'Technical scoping', () => this.setState({ meetingFilter: 'Technical scoping' }))
+      ],
+
+      detail,
+
+      resellerNames: RESELLERS,
+      amNames: AMS,
+      typeNames: TYPES,
+      form: this.state.form,
+      setReseller: this.setField('reseller'),
+      setAm: this.setField('am'),
+      setDate: this.setField('date'),
+      setType: this.setField('type'),
+      setQuotes: this.setField('quotes'),
+      setTasks: this.setField('tasks'),
+      setOutcome: this.setField('outcome'),
+      setNotes: this.setField('notes'),
+      save: this.save,
+
+      quotes,
+      quoteStats: [
+        { label: 'Open pipeline', value: 'R 563 050' },
+        { label: 'Won this quarter', value: 'R 256 000' },
+        { label: 'Expiring in 14 days', value: '3 quotes' }
+      ],
+
+      tasks,
+      taskFilters: [
+        chip('Open', tf === 'Open', () => this.setState({ taskFilter: 'Open' })),
+        chip('Mine', tf === 'Mine', () => this.setState({ taskFilter: 'Mine' })),
+        chip('Blocked', tf === 'Blocked', () => this.setState({ taskFilter: 'Blocked' })),
+        chip('Overdue', tf === 'Overdue', () => this.setState({ taskFilter: 'Overdue' })),
+        chip('All', tf === 'All', () => this.setState({ taskFilter: 'All' }))
+      ],
+
+      meetingsByReseller: byReseller.map(r => ({ ...r, count: String(r.count), pct: Math.round(r.count / maxC * 100) + '%' })),
+      valueByStage: stageTotals.map(s => ({ stage: s.stage, value: fmt(s.n), pct: Math.round(s.n / maxV * 100) + '%' })),
+      health: [
+        { value: '11 days', label: 'Average gap between meetings' },
+        { value: '2 of 8', label: 'Resellers outside their agreed cadence' },
+        { value: '68%', label: 'Meetings that produced a quote' },
+        { value: '4.2 days', label: 'Average age of an open task' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

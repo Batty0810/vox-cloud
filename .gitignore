@@ -1,0 +1,19 @@
+# Design-tool preview artifact
+.thumbnail
+
+# OneDrive / Windows
+desktop.ini
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+
+# Local tooling config
+.claude/
+
+# Editors
+.vscode/
+.idea/
+*.swp

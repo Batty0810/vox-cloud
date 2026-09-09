@@ -1,0 +1,6 @@
+/* =========================================================================
+   Nymbis Design System — root stylesheet
+   Consumers link THIS file; it pulls in every layer of the system.
+   ========================================================================= */
+
+@import url('colors_and_type.css');

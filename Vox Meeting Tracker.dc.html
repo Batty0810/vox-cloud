@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/colors_and_type.css">
+<link rel="stylesheet" href="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/styles.css">
+<script src="_ds/nymbis-design-system-bca8fb8a-9bc1-4a8f-9b08-88baa8f75dd3/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:var(--bg-2);-webkit-font-smoothing:antialiased}
+a{color:var(--nymbis-plum);text-decoration:none}
+a:hover{color:var(--nymbis-red);text-decoration:underline}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-3);padding:0 14px 9px;white-space:nowrap}
+td{padding:var(--rp,13px) 14px;font-size:14px;border-top:1px solid var(--border-1);vertical-align:middle;white-space:nowrap}
+tbody tr:hover td{background:var(--bg-2)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#420A38"/><rect x="30" y="30" width="40" height="40" rx="10" fill="url(#g)"/><text x="50" y="57" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">V</text><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF583C"/><stop offset="0.55" stop-color="#FF1A40"/><stop offset="1" stop-color="#9D0081"/></linearGradient></defs></svg></template>
+<div style="display:flex;min-height:100vh;font-family:var(--font-sans);color:var(--fg-1);--rp:{{ rowPad }}">
+  <aside style="width:238px;flex:none;background:var(--nymbis-plum-deep);padding:26px 16px;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;align-self:flex-start;height:100vh;box-sizing:border-box">
+    <img src="assets/nymbis-white.png" alt="Nymbis" style="width:118px;height:auto;margin:2px 6px 0">
+    <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#fff;border-radius:var(--radius-md)">
+      <img src="assets/vox-logo.png" alt="Vox" style="width:52px;height:auto;flex:none">
+      <span style="display:flex;flex-direction:column;line-height:1.25">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);font-variation-settings:'wdth' 112,'wght' 600">Reseller</span>
+        <span style="font-size:13px;color:var(--fg-1);font-variation-settings:'wdth' 112,'wght' 600">Vox</span>
+      </span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <div onClick="{{ n.go }}" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;font-variation-settings:'wdth' 112,'wght' 600;color:{{ n.fg }};background:{{ n.bg }};transition:background 200ms var(--ease-out)">
+          <span style="width:3px;height:14px;border-radius:2px;flex:none;background:{{ n.bar }}"></span>
+          <span style="flex:1">{{ n.label }}</span>
+          <span style="font-size:11px;font-variation-settings:'wdth' 112,'wght' 600;color:rgba(255,255,255,.5)">{{ n.count }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.12)">
+      <span style="width:30px;height:30px;border-radius:999px;flex:none;background:var(--nymbis-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-variation-settings:'wdth' 112,'wght' 700">TM</span>
+      <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0">
+        <span style="font-size:12.5px;color:#fff;font-variation-settings:'wdth' 112,'wght' 600">Thandi Mokoena</span>
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Nymbis channel</span>
+      </span>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="background:#fff;border-bottom:1px solid var(--border-1);padding:12px 32px;min-height:68px;box-sizing:border-box;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:5">
+      <div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--nymbis-red);font-variation-settings:'wdth' 112,'wght' 600">{{ eyebrow }}</span>
+        <span style="font-size:20px;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.01em;white-space:nowrap">{{ title }}</span>
+      </div>
+      <div style="flex:1 1 300px;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:10px">
+        <input value="{{ query }}" onChange="{{ setQuery }}" placeholder="Search customer, AM, task number" style="flex:1 1 200px;min-width:0;max-width:290px;box-sizing:border-box;font-family:var(--font-sans);font-size:13.5px;padding:10px 14px;border-radius:999px;border:1.5px solid var(--border-1);background:var(--bg-2);outline:none;color:var(--fg-1)">
+        <span onClick="{{ goNew }}">
+          <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" size="sm" hint-size="auto,34px">Log a meeting</x-import>
+        </span>
+      </div>
+    </header>
+
+    <div style="padding:28px 32px 56px;animation:rise 360ms var(--ease-out)">
+
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Dashboard" style="display:flex;flex-direction:column;gap:22px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);font-variation-settings:'wdth' 112,'wght' 600">{{ s.label }}</span>
+                <span style="font-size:30px;line-height:1.05;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.02em;font-feature-settings:'tnum' 1">{{ s.value }}</span>
+                <span style="font-size:12.5px;color:var(--fg-2)">{{ s.sub }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 22px 14px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Latest meetings</span>
+                <a href="#" onClick="{{ goLog }}" style="font-size:12.5px">Full log</a>
+              </div>
+              <div style="padding:0 8px 12px;overflow-x:auto">
+                <table style="min-width:780px">
+                  <thead><tr><th>Date</th><th>Account manager</th><th>Customer</th><th>Opportunity</th><th>Nymbis quote</th><th>Quoted value</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{ recent }}" as="m" hint-placeholder-count="5">
+                      <tr onClick="{{ m.open }}" style="cursor:pointer">
+                        <td style="color:var(--fg-2);font-feature-settings:'tnum' 1">{{ m.date }}</td>
+                        <td style="font-variation-settings:'wdth' 112,'wght' 600">{{ m.am }}</td>
+                        <td style="color:var(--fg-2)">{{ m.customer }}</td>
+                        <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.oppTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.oppLabel }}</x-import></td>
+                        <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700">{{ m.quoteNoLabel }}</td>
+                        <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ m.quoteValueLabel }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+                  <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Activity by account manager</span>
+                  <a href="#" onClick="{{ goReport }}" style="font-size:12.5px">Report</a>
+                </div>
+                <sc-for list="{{ amBars }}" as="a" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0">
+                    <span style="width:118px;flex:none;font-size:13px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ a.am }}</span>
+                    <span style="flex:1;min-width:0;height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:block">
+                      <span style="display:block;height:100%;border-radius:999px;background:var(--nymbis-gradient);width:{{ a.pct }}"></span>
+                    </span>
+                    <span style="width:20px;flex:none;text-align:right;font-size:13px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ a.meetings }}</span>
+                  </div>
+                </sc-for>
+              </section>
+
+              <section style="background:var(--nymbis-plum-deep);border-radius:var(--radius-lg);padding:20px 22px;color:#fff">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Awaiting a quote</span>
+                <div style="display:flex;flex-direction:column;gap:2px;margin-top:12px">
+                  <sc-for list="{{ openOpps }}" as="o" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.14)">
+                      <span style="flex:1;min-width:0;font-size:13.5px;color:rgba(255,255,255,.92);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ o.customer }}</span>
+                      <span style="font-size:12px;color:rgba(255,255,255,.5);flex:none">{{ o.am }}</span>
+                      <span style="font-size:13.5px;flex:none;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600;color:var(--nymbis-soft-pink)">{{ o.valueLabel }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLog }}">
+        <div data-screen-label="Meeting log" style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ filters }}" as="f" hint-placeholder-count="3">
+              <span onClick="{{ f.go }}" style="cursor:pointer;font-size:12.5px;padding:7px 15px;border-radius:999px;border:1.5px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};font-variation-settings:'wdth' 112,'wght' 600">{{ f.label }}</span>
+            </sc-for>
+            <select value="{{ amFilter }}" onChange="{{ setAmFilter }}" style="margin-left:6px;font-family:var(--font-sans);font-size:12.5px;padding:7px 12px;border-radius:999px;border:1.5px solid var(--border-1);background:#fff;color:var(--fg-2)">
+              <option>All account managers</option>
+              <sc-for list="{{ amNames }}" as="a" hint-placeholder-count="5"><option>{{ a }}</option></sc-for>
+            </select>
+            <span style="margin-left:auto;font-size:12.5px;color:var(--fg-3)">{{ logCount }}</span>
+          </div>
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 8px 12px;overflow-x:auto">
+            <table style="min-width:1360px">
+              <thead><tr><th>Date</th><th>Time</th><th>CRM task</th><th>Account manager</th><th>Customer</th><th>Attendees</th><th>Opportunity</th><th>Possible value</th><th>Nymbis quote</th><th>Quoted value</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ log }}" as="m" hint-placeholder-count="10">
+                  <tr onClick="{{ m.open }}" style="cursor:pointer">
+                    <td style="color:var(--fg-2);font-feature-settings:'tnum' 1">{{ m.date }}</td>
+                    <td style="color:var(--fg-3);font-feature-settings:'tnum' 1">{{ m.time }}</td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700">{{ m.crm }}</td>
+                    <td style="font-variation-settings:'wdth' 112,'wght' 600">{{ m.am }}</td>
+                    <td style="color:var(--fg-2)">{{ m.customer }}</td>
+                    <td style="color:var(--fg-2);font-feature-settings:'tnum' 1">{{ m.attendeeCount }}</td>
+                    <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.oppTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.oppLabel }}</x-import></td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ m.valueLabel }}</td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700">{{ m.quoteNoLabel }}</td>
+                    <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ m.quoteValueLabel }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDetail }}">
+        <div data-screen-label="Meeting detail" style="display:flex;flex-direction:column;gap:20px">
+          <a href="#" onClick="{{ goLog }}" style="font-size:12.5px">Back to meeting log</a>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:26px 28px;display:flex;flex-direction:column;gap:20px;min-width:0">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--nymbis-red);font-variation-settings:'wdth' 112,'wght' 600">{{ detail.date }} · {{ detail.time }} · {{ detail.crm }}</span>
+                <span style="font-size:26px;line-height:1.15;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.02em">{{ detail.customer }}</span>
+                <span style="font-size:13.5px;color:var(--fg-2)">Hosted by {{ detail.am }} · Vox</span>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ detail.oppTone }}" dot="{{ true }}" hint-size="auto,24px">{{ detail.oppLabel }}</x-import>
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="neutral" hint-size="auto,24px">{{ detail.interest }}</x-import>
+                <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="neutral" hint-size="auto,24px">{{ detail.channel }}</x-import>
+              </div>
+              <div style="height:1px;background:var(--border-1)"></div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Discussion</span>
+                <sc-for list="{{ detail.notes }}" as="note" hint-placeholder-count="3">
+                  <p style="margin:0;font-size:14.5px;line-height:1.55">{{ note }}</p>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Next steps</span>
+                <sc-for list="{{ detail.next }}" as="step" hint-placeholder-count="2">
+                  <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--bg-2);border:1px solid var(--border-1);border-radius:var(--radius-md);font-size:14px;line-height:1.45">
+                    <span style="flex:1;min-width:0">{{ step.text }}</span>
+                    <span style="flex:none;font-size:12px;color:var(--fg-3)">{{ step.owner }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+
+            <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px;display:flex;flex-direction:column;gap:4px">
+                <span style="font-size:15px;font-variation-settings:'wdth' 112,'wght' 700;margin-bottom:8px">Meeting record</span>
+                <sc-for list="{{ detail.meta }}" as="row" hint-placeholder-count="6">
+                  <div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--border-1);font-size:13.5px">
+                    <span style="color:var(--fg-3);flex:none">{{ row.k }}</span>
+                    <span style="text-align:right;min-width:0;font-variation-settings:'wdth' 112,'wght' 600">{{ row.v }}</span>
+                  </div>
+                </sc-for>
+              </section>
+              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:15px;font-variation-settings:'wdth' 112,'wght' 700">Attendees</span>
+                <sc-for list="{{ detail.attendees }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--border-1)">
+                    <span style="width:28px;height:28px;border-radius:999px;flex:none;background:var(--bg-3);color:var(--nymbis-plum);display:flex;align-items:center;justify-content:center;font-size:11px;font-variation-settings:'wdth' 112,'wght' 700">{{ p.initials }}</span>
+                    <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0">
+                      <span style="font-size:13.5px;font-variation-settings:'wdth' 112,'wght' 600">{{ p.name }}</span>
+                      <span style="font-size:12px;color:var(--fg-3)">{{ p.role }}</span>
+                    </span>
+                  </div>
+                </sc-for>
+              </section>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isNew }}">
+        <div data-screen-label="Log a meeting" style="max-width:860px;display:flex;flex-direction:column;gap:20px">
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:28px 30px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Vox account manager</span>
+                <select value="{{ form.am }}" onChange="{{ setAm }}" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                  <sc-for list="{{ amNames }}" as="a" hint-placeholder-count="5"><option>{{ a }}</option></sc-for>
+                </select>
+              </label>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Customer name" placeholder="End customer the AM introduced" value="{{ form.customer }}" on-change="{{ setCustomer }}" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Vox CRM task number" placeholder="TSK-448291" value="{{ form.crm }}" on-change="{{ setCrm }}" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Date" type="date" value="{{ form.date }}" on-change="{{ setDate }}" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Time" type="time" value="{{ form.time }}" on-change="{{ setTime }}" hint-size="100%,72px"></x-import>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Product interest</span>
+                <select value="{{ form.interest }}" onChange="{{ setInterest }}" style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                  <sc-for list="{{ interests }}" as="i" hint-placeholder-count="6"><option>{{ i }}</option></sc-for>
+                </select>
+              </label>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2)">Attendees</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ attendeeChips }}" as="c" hint-placeholder-count="2">
+                  <span style="display:inline-flex;align-items:center;gap:8px;padding:7px 8px 7px 14px;border-radius:999px;background:var(--bg-3);font-size:13px">
+                    <span>{{ c.name }}</span>
+                    <span onClick="{{ c.remove }}" style="cursor:pointer;width:18px;height:18px;border-radius:999px;background:#fff;color:var(--nymbis-plum);display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1;font-variation-settings:'wdth' 112,'wght' 700">&#215;</span>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <input value="{{ attendeeDraft }}" onChange="{{ setAttendeeDraft }}" onKeyDown="{{ attendeeKey }}" placeholder="Name, role — press Enter to add" style="flex:1 1 260px;min-width:0;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                <span onClick="{{ addAttendee }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="outline" size="sm" hint-size="auto,34px">Add attendee</x-import></span>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;align-items:start">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2)">Potential opportunity</span>
+                <div style="display:flex;gap:8px">
+                  <sc-for list="{{ oppChoices }}" as="o" hint-placeholder-count="2">
+                    <span onClick="{{ o.go }}" style="cursor:pointer;flex:1;text-align:center;font-size:13.5px;padding:11px 14px;border-radius:var(--radius-sm);border:1.5px solid {{ o.border }};background:{{ o.bg }};color:{{ o.fg }};font-variation-settings:'wdth' 112,'wght' 600">{{ o.label }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Possible quote value (R)" placeholder="0" value="{{ form.value }}" on-change="{{ setValue }}" helper="{{ valueHelper }}" hint-size="100%,92px"></x-import>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;padding:20px 22px;background:var(--bg-2);border:1px solid var(--border-1);border-radius:var(--radius-md)">
+              <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:3px">
+                <span style="font-size:15px;font-variation-settings:'wdth' 112,'wght' 700">Quote generated</span>
+                <span style="font-size:12.5px;color:var(--fg-2);text-wrap:pretty">Complete this once Nymbis has issued a quote. Quoted value is the firm number Vox management reports on.</span>
+              </div>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Nymbis quote number" placeholder="NQ-2418" value="{{ form.quoteNo }}" on-change="{{ setQuoteNo }}" hint-size="100%,72px"></x-import>
+              <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Quoted value (R)" placeholder="0" value="{{ form.quoteValue }}" on-change="{{ setQuoteValue }}" hint-size="100%,72px"></x-import>
+            </div>
+
+            <label style="display:block">
+              <span style="display:block;font-size:13px;font-variation-settings:'wdth' 112,'wght' 600;color:var(--fg-2);margin-bottom:6px">Notes</span>
+              <textarea value="{{ form.notes }}" onChange="{{ setNotes }}" rows="5" placeholder="What the customer needs, what was committed, what happens next." style="width:100%;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;line-height:1.5;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1);resize:vertical"></textarea>
+            </label>
+
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:4px">
+              <span onClick="{{ save }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" hint-size="auto,44px">Save meeting</x-import></span>
+              <span onClick="{{ goLog }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="ghost" hint-size="auto,44px">Cancel</x-import></span>
+              <span style="margin-left:auto;font-size:12.5px;color:var(--fg-3)">Saved meetings feed the Vox management report.</span>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isReport }}">
+        <div data-screen-label="Management report" style="display:flex;flex-direction:column;gap:20px">
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:24px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+            <img src="assets/vox-logo.png" alt="Vox" style="width:66px;height:auto;flex:none">
+            <span style="width:1px;height:38px;background:var(--border-1);flex:none"></span>
+            <img src="assets/nymbis-purple.png" alt="Nymbis" style="width:104px;height:auto;flex:none">
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 220px">
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--nymbis-red);font-variation-settings:'wdth' 112,'wght' 600">Joint activity report</span>
+              <span style="font-size:18px;font-variation-settings:'wdth' 112,'wght' 700">{{ period }}</span>
+            </span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ periods }}" as="p" hint-placeholder-count="3">
+                <span onClick="{{ p.go }}" style="cursor:pointer;font-size:12.5px;padding:7px 15px;border-radius:999px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};font-variation-settings:'wdth' 112,'wght' 600">{{ p.label }}</span>
+              </sc-for>
+            </div>
+          </section>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
+            <sc-for list="{{ reportStats }}" as="s" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:5px">
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);font-variation-settings:'wdth' 112,'wght' 600">{{ s.label }}</span>
+                <span style="font-size:28px;line-height:1.05;font-variation-settings:'wdth' 112,'wght' 700;letter-spacing:-.02em;font-feature-settings:'tnum' 1">{{ s.value }}</span>
+                <span style="font-size:12.5px;color:var(--fg-2)">{{ s.sub }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:22px 8px 12px;overflow-x:auto">
+            <div style="padding:0 14px 14px;display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Per account manager</span>
+              <span style="font-size:12.5px;color:var(--fg-3)">{{ period }}</span>
+            </div>
+            <table style="min-width:940px">
+              <thead><tr><th>Account manager</th><th>Meetings</th><th>Opportunities</th><th>Maybe</th><th>Quotes</th><th>Possible value</th><th>Quoted value</th></tr></thead>
+              <tbody>
+                <sc-for list="{{ amRows }}" as="a" hint-placeholder-count="5">
+                  <tr>
+                    <td style="font-variation-settings:'wdth' 112,'wght' 600">{{ a.am }}</td>
+                    <td style="font-feature-settings:'tnum' 1">{{ a.meetings }}</td>
+                    <td style="font-feature-settings:'tnum' 1">{{ a.opps }}</td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ a.maybes }}</td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ a.quotes }}</td>
+                    <td style="font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ a.value }}</td>
+                    <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ a.quotedValue }}</td>
+                  </tr>
+                </sc-for>
+                <tr>
+                  <td style="font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">Total</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.meetings }}</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.opps }}</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.maybes }}</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.quotes }}</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.value }}</td>
+                  <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700;border-top:2px solid var(--border-2)">{{ totals.quotedValue }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:22px 24px;display:flex;flex-direction:column;gap:14px;min-width:0">
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Meetings by month</span>
+                <span style="font-size:12.5px;color:var(--fg-3)">Opportunities in plum, other meetings in pink</span>
+              </div>
+              <sc-for list="{{ months }}" as="m" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;font-size:13px">
+                    <span style="color:var(--fg-2)">{{ m.label }}</span>
+                    <span style="font-feature-settings:'tnum' 1;color:var(--fg-2)">{{ m.summary }}</span>
+                  </div>
+                  <span style="height:10px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:flex">
+                    <span style="display:block;height:100%;background:var(--nymbis-plum);width:{{ m.oppPct }}"></span>
+                    <span style="display:block;height:100%;background:var(--nymbis-soft-pink);width:{{ m.restPct }}"></span>
+                  </span>
+                </div>
+              </sc-for>
+            </section>
+
+            <section style="background:var(--nymbis-plum);border-radius:var(--radius-lg);padding:22px 24px;color:#fff;display:flex;flex-direction:column;gap:14px;min-width:0">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Largest quotes issued</span>
+              <sc-for list="{{ topOpps }}" as="o" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.2)">
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3">
+                    <span style="font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ o.customer }}</span>
+                    <span style="font-size:11.5px;color:rgba(255,255,255,.6)">{{ o.am }} · {{ o.interest }}</span>
+                  </span>
+                  <span style="flex:none;font-size:14px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 700">{{ o.valueLabel }}</span>
+                </div>
+              </sc-for>
+            </section>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;'comfortable'|'compact'&quot;,&quot;section&quot;:&quot;Tables&quot;}}">
+const AMS = ['Lerato Dlamini', 'Andre Kruger', 'Nomvula Zulu', 'Ryan Pillay', 'Chantelle Meyer'];
+const INTERESTS = ['Backup and recovery', 'Disaster recovery', 'Cloud compute', 'Object storage', 'Data centre hosting', 'Microsoft 365 backup'];
+
+const initials = (name) => name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const person = (name, role) => ({ name, role, initials: initials(name) });
+
+const MEETINGS = [
+  { id: 'v1', iso: '2026-09-08', date: '08 Sep 2026', time: '10:00', am: 'Lerato Dlamini', customer: 'Kloof Foods', crm: 'TSK-448291',
+    opp: 'Yes', value: 218400, quoteNo: 'NQ-2418', quoteValue: 218400, interest: 'Backup and recovery', channel: 'On site, Century City',
+    attendees: [person('Marc Delport', 'IT director, Kloof Foods'), person('Lerato Dlamini', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
+    notes: [
+      'Kloof Foods run 34 workloads across two sites and currently back up to tape. Marc wants a hosted Veeam tenancy with a four-hour restore target and a single monthly invoice through Vox.',
+      'They will not consider a full disaster-recovery build this year, but asked us to price the backup piece as if DR follows in the new financial year.'
+    ],
+    next: [{ text: 'Nymbis to send a sized backup proposal through Vox', owner: 'Nymbis' }, { text: 'Lerato to confirm the billing entity with Kloof finance', owner: 'Vox' }] },
+  { id: 'v2', iso: '2026-09-04', date: '04 Sep 2026', time: '14:30', am: 'Andre Kruger', customer: 'Aurum Mining', crm: 'TSK-447903',
+    opp: 'Yes', value: 486000, quoteNo: '', quoteValue: 0, interest: 'Data centre hosting',
+    channel: 'Teams call',
+    attendees: [person('Susan Naidoo', 'Head of infrastructure, Aurum Mining'), person('Pieter Grobler', 'Network lead, Aurum Mining'), person('Andre Kruger', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
+    notes: [
+      'Aurum are exiting their own server room by March and need hosting for 14 racks with dual-path power. Susan is comparing three providers, Vox included.',
+      'Their decision criteria are power redundancy, cross-connect options and a South African data residency commitment in writing.'
+    ],
+    next: [{ text: 'Nymbis to supply data centre facility pack and residency letter', owner: 'Nymbis' }, { text: 'Site visit to be booked for the week of 22 September', owner: 'Vox' }] },
+  { id: 'v3', iso: '2026-09-02', date: '02 Sep 2026', time: '09:00', am: 'Nomvula Zulu', customer: 'Cape Union Freight', crm: 'TSK-447688',
+    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Cloud compute', channel: 'Teams call',
+    attendees: [person('Riaan Louw', 'IT manager, Cape Union Freight'), person('Nomvula Zulu', 'Account manager, Vox')],
+    notes: [
+      'Introductory call. Cape Union Freight moved to a competitor platform six months ago and are locked in for two years.',
+      'Riaan was open to a conversation closer to renewal. No opportunity to log now.'
+    ],
+    next: [{ text: 'Diarise a follow-up for June 2027', owner: 'Vox' }] },
+  { id: 'v4', iso: '2026-08-27', date: '27 Aug 2026', time: '11:00', am: 'Lerato Dlamini', customer: 'Sanlow Insurance', crm: 'TSK-447102',
+    opp: 'Yes', value: 132750, quoteNo: 'NQ-2431', quoteValue: 129900, interest: 'Microsoft 365 backup', channel: 'On site, Sandton',
+    attendees: [person('Ayanda Mthembu', 'CISO, Sanlow Insurance'), person('Lerato Dlamini', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
+    notes: [
+      'Sanlow need immutable Microsoft 365 backup for 240 seats to satisfy an audit finding. The audit response is due end November, so the timeline is firm.',
+      'Ayanda asked specifically about retention beyond seven years and whether backups stay in South Africa.'
+    ],
+    next: [{ text: 'Quote 240 seats with 7-year retention', owner: 'Nymbis' }] },
+  { id: 'v5', iso: '2026-08-21', date: '21 Aug 2026', time: '15:00', am: 'Ryan Pillay', customer: 'Highveld Logistics', crm: 'TSK-446840',
+    opp: 'Maybe', value: 96500, quoteNo: '', quoteValue: 0, interest: 'Disaster recovery', channel: 'Teams call',
+    attendees: [person('Dumisani Khumalo', 'Operations director, Highveld Logistics'), person('Ryan Pillay', 'Account manager, Vox')],
+    notes: [
+      'Highveld lost half a day of despatch operations to a power event in July. Dumisani now has board attention and a budget line for disaster recovery.',
+      'Eight virtual machines in scope, four-hour recovery objective.'
+    ],
+    next: [{ text: 'Scope a DR runbook workshop with the Nymbis engineer', owner: 'Nymbis' }] },
+  { id: 'v6', iso: '2026-08-19', date: '19 Aug 2026', time: '08:30', am: 'Chantelle Meyer', customer: 'Belmont Health', crm: 'TSK-446715',
+    opp: 'Yes', value: 61440, quoteNo: 'NQ-2429', quoteValue: 63200, interest: 'Backup and recovery', channel: 'On site, Durban',
+    attendees: [person('Fatima Ismail', 'Practice manager, Belmont Health'), person('Chantelle Meyer', 'Account manager, Vox'), person('Dylan Nkosi', 'Solutions architect, Nymbis')],
+    notes: [
+      'Belmont run a group of six practices on a shared patient records system. Their concern is a two-hour restore expectation on the records database.',
+      'Fatima will need the medical data handling assurances in the proposal.'
+    ],
+    next: [{ text: 'Include POPIA data handling annexure with the quote', owner: 'Nymbis' }] },
+  { id: 'v7', iso: '2026-08-14', date: '14 Aug 2026', time: '13:00', am: 'Andre Kruger', customer: 'Rondebosch Academy', crm: 'TSK-446402',
+    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Object storage', channel: 'Teams call',
+    attendees: [person('Grant Peters', 'IT coordinator, Rondebosch Academy'), person('Andre Kruger', 'Account manager, Vox')],
+    notes: [
+      'Exploratory. The academy has a media archive of roughly 40 TB but no budget approved until the next school year.',
+      'Useful context for later, nothing to quote.'
+    ],
+    next: [{ text: 'Revisit in the first term of 2027', owner: 'Vox' }] },
+  { id: 'v8', iso: '2026-08-11', date: '11 Aug 2026', time: '10:30', am: 'Nomvula Zulu', customer: 'Tsogo Retail Group', crm: 'TSK-446188',
+    opp: 'Maybe', value: 274600, quoteNo: '', quoteValue: 0, interest: 'Cloud compute', channel: 'On site, Pretoria',
+    attendees: [person('Sipho Dube', 'Solutions architect, Tsogo Retail Group'), person('Keshia Naicker', 'Head of IT, Tsogo Retail Group'), person('Nomvula Zulu', 'Account manager, Vox'), person('Dylan Nkosi', 'Solutions architect, Nymbis')],
+    notes: [
+      'Tsogo want a hybrid model: point-of-sale stays on premise, everything else moves to hosted compute. 42 workloads in the first wave.',
+      'Sipho needs the network path confirmed before we can size the interconnect.'
+    ],
+    next: [{ text: 'Produce a hybrid reference architecture', owner: 'Nymbis' }, { text: 'Confirm interconnect options at store level', owner: 'Vox' }] },
+  { id: 'v9', iso: '2026-07-30', date: '30 Jul 2026', time: '09:30', am: 'Ryan Pillay', customer: 'Delta Steel', crm: 'TSK-445790',
+    opp: 'Yes', value: 158200, quoteNo: 'NQ-2402', quoteValue: 161500, interest: 'Disaster recovery', channel: 'Teams call',
+    attendees: [person('Willem Botha', 'Group IT manager, Delta Steel'), person('Ryan Pillay', 'Account manager, Vox')],
+    notes: [
+      'Delta Steel have an ageing secondary site and would rather pay for hosted DR than refresh the hardware.',
+      'Willem asked for a three-year cost comparison against a hardware refresh.'
+    ],
+    next: [{ text: 'Build three-year cost comparison', owner: 'Nymbis' }] },
+  { id: 'v10', iso: '2026-07-24', date: '24 Jul 2026', time: '14:00', am: 'Chantelle Meyer', customer: 'Marico Agri', crm: 'TSK-445533',
+    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Backup and recovery', channel: 'On site, Bloemfontein',
+    attendees: [person('Anton Steyn', 'Owner, Marico Agri'), person('Chantelle Meyer', 'Account manager, Vox')],
+    notes: [
+      'Small environment, four servers, already covered by an existing arrangement with their local IT provider.',
+      'Anton was clear there is no change planned. Logged for completeness.'
+    ],
+    next: [] },
+  { id: 'v11', iso: '2026-07-16', date: '16 Jul 2026', time: '11:30', am: 'Lerato Dlamini', customer: 'Zenith Legal', crm: 'TSK-445201',
+    opp: 'Yes', value: 46900, quoteNo: 'NQ-2395', quoteValue: 46900, interest: 'Microsoft 365 backup', channel: 'Teams call',
+    attendees: [person('Nadia Roux', 'Practice administrator, Zenith Legal'), person('Lerato Dlamini', 'Account manager, Vox')],
+    notes: [
+      'Sixty seats, straightforward Microsoft 365 backup requirement driven by their professional indemnity insurer.',
+      'Nadia wants a fixed monthly figure with no setup fee.'
+    ],
+    next: [{ text: 'Quote 60 seats, no setup fee', owner: 'Nymbis' }] },
+  { id: 'v12', iso: '2026-07-09', date: '09 Jul 2026', time: '16:00', am: 'Andre Kruger', customer: 'Coastal Media', crm: 'TSK-444988',
+    opp: 'Yes', value: 52000, quoteNo: 'NQ-2388', quoteValue: 52000, interest: 'Object storage', channel: 'Teams call',
+    attendees: [person('Thabo Molefe', 'Post-production lead, Coastal Media'), person('Andre Kruger', 'Account manager, Vox')],
+    notes: [
+      'Coastal Media need 40 TB of object storage for finished project archives, growing about 2 TB a month.',
+      'Retrieval is rare but must complete inside 24 hours.'
+    ],
+    next: [{ text: 'Quote 40 TB with a growth schedule', owner: 'Nymbis' }] }
+];
+
+const OPP_TONE = { Yes: 'healthy', Maybe: 'atRisk', No: 'neutral' };
+const OPP_LABEL = { Yes: 'Opportunity', Maybe: 'Maybe', No: 'No opportunity' };
+
+const PERIODS = [
+  { label: 'This month', test: (m) => m.iso >= '2026-09-01', name: 'September 2026' },
+  { label: 'Last 90 days', test: (m) => m.iso >= '2026-06-11', name: 'Rolling 90 days to 09 Sep 2026' },
+  { label: 'All time', test: () => true, name: 'All recorded meetings' }
+];
+
+const SCREENS = [
+  { id: 'dashboard', label: 'Dashboard', eyebrow: 'Vox reseller desk', title: 'Overview' },
+  { id: 'log', label: 'Meeting log', eyebrow: 'Meetings', title: 'Meeting log' },
+  { id: 'new', label: 'Log a meeting', eyebrow: 'Meetings', title: 'Log a meeting' },
+  { id: 'report', label: 'Management report', eyebrow: 'Vox management', title: 'Joint activity report' }
+];
+
+const money = (n) => 'R ' + Math.round(n).toLocaleString('en-ZA').replace(/,/g, ' ');
+const short = (n) => n >= 1000000 ? 'R ' + (n / 1000000).toFixed(1) + 'm' : n >= 1000 ? 'R ' + Math.round(n / 1000) + 'k' : money(n);
+
+class Component extends DCLogic {
+  state = {
+    screen: 'dashboard',
+    id: 'v1',
+    query: '',
+    filter: 'All',
+    amFilter: 'All account managers',
+    period: 1,
+    extra: [],
+    attendeeDraft: '',
+    form: { am: 'Lerato Dlamini', customer: '', crm: '', date: '2026-09-09', time: '10:00', interest: 'Backup and recovery', opp: 'Yes', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
+  };
+
+  go = (screen) => () => this.setState({ screen });
+  open = (id) => () => this.setState({ screen: 'detail', id });
+  setField = (k) => (e) => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } }));
+
+  addAttendee = () => {
+    const v = this.state.attendeeDraft.trim();
+    if (!v) return;
+    this.setState(s => ({ attendeeDraft: '', form: { ...s.form, attendees: [...s.form.attendees, v] } }));
+  };
+
+  save = () => {
+    const f = this.state.form;
+    const d = new Date(f.date + 'T00:00:00');
+    const date = isNaN(d) ? f.date : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const num = (x) => parseFloat(String(x).replace(/[^0-9.]/g, '')) || 0;
+    const value = f.opp === 'No' ? 0 : num(f.value);
+    const m = {
+      id: 'n' + this.state.extra.length, iso: f.date, date, time: f.time,
+      am: f.am, customer: f.customer || 'Unnamed customer', crm: f.crm || 'Not captured',
+      opp: f.opp, value, quoteNo: f.quoteNo.trim(), quoteValue: f.quoteNo.trim() ? num(f.quoteValue) : 0,
+      interest: f.interest, channel: 'Not recorded',
+      attendees: (f.attendees.length ? f.attendees : ['Not recorded']).map(a => {
+        const [name, role] = a.split(/\s*,\s*/);
+        return person(name || a, role || 'Attendee');
+      }),
+      notes: f.notes ? f.notes.split('\n').filter(Boolean) : ['No notes recorded.'],
+      next: []
+    };
+    this.setState(s => ({
+      extra: [m, ...s.extra], screen: 'log',
+      form: { ...s.form, customer: '', crm: '', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
+    }));
+  };
+
+  renderVals() {
+    const p = this.props;
+    const st = this.state;
+    const screen = st.screen;
+    const active = SCREENS.find(s => s.id === screen);
+    const all = [...st.extra, ...MEETINGS];
+
+    const dec = (m) => ({
+      ...m,
+      attendeeCount: String(m.attendees.length),
+      oppTone: OPP_TONE[m.opp] || 'neutral',
+      oppLabel: OPP_LABEL[m.opp] || m.opp,
+      valueLabel: m.value ? money(m.value) : '—',
+      quoted: !!m.quoteNo,
+      quoteNoLabel: m.quoteNo || '—',
+      quoteValueLabel: m.quoteValue ? money(m.quoteValue) : '—',
+      open: this.open(m.id)
+    });
+
+    const q = st.query.trim().toLowerCase();
+    const decorated = all.map(dec);
+    const searched = decorated.filter(m => !q || (m.customer + ' ' + m.am + ' ' + m.crm + ' ' + m.interest).toLowerCase().includes(q));
+    const log = searched
+      .filter(m => st.filter === 'All' || (st.filter === 'Quoted' ? m.quoted : m.opp === st.filter))
+      .filter(m => st.amFilter === 'All account managers' || m.am === st.amFilter);
+
+    const detail = decorated.find(m => m.id === st.id) || decorated[0];
+    const detailFull = detail ? {
+      ...detail,
+      meta: [
+        { k: 'Vox account manager', v: detail.am },
+        { k: 'Customer', v: detail.customer },
+        { k: 'Vox CRM task', v: detail.crm },
+        { k: 'Date', v: detail.date },
+        { k: 'Time', v: detail.time },
+        { k: 'Attendees', v: detail.attendeeCount },
+        { k: 'Opportunity', v: detail.opp },
+        { k: 'Possible value', v: detail.valueLabel },
+        { k: 'Nymbis quote number', v: detail.quoteNoLabel },
+        { k: 'Quoted value', v: detail.quoteValueLabel }
+      ]
+    } : null;
+
+    const chip = (label, on, fn) => ({
+      label, go: fn,
+      bg: on ? 'var(--nymbis-plum)' : '#fff',
+      fg: on ? '#fff' : 'var(--fg-2)',
+      border: on ? 'var(--nymbis-plum)' : 'var(--border-1)'
+    });
+
+    const period = PERIODS[st.period];
+    const inPeriod = all.filter(period.test);
+    const opps = inPeriod.filter(m => m.opp === 'Yes');
+    const maybes = inPeriod.filter(m => m.opp === 'Maybe');
+    const quotedSet = inPeriod.filter(m => m.quoteNo);
+    const totalValue = inPeriod.filter(m => m.opp !== 'No').reduce((a, m) => a + m.value, 0);
+    const quotedValue = quotedSet.reduce((a, m) => a + m.quoteValue, 0);
+
+    const amRows = AMS.map(am => {
+      const mine = inPeriod.filter(m => m.am === am);
+      const o = mine.filter(m => m.opp === 'Yes');
+      const mb = mine.filter(m => m.opp === 'Maybe');
+      const qs = mine.filter(m => m.quoteNo);
+      const v = mine.filter(m => m.opp !== 'No').reduce((a, m) => a + m.value, 0);
+      const qv = qs.reduce((a, m) => a + m.quoteValue, 0);
+      return {
+        am, meetings: String(mine.length), opps: String(o.length), maybes: String(mb.length),
+        quotes: String(qs.length),
+        value: v ? money(v) : '—',
+        quotedValue: qv ? money(qv) : '—',
+        n: mine.length
+      };
+    }).sort((a, b) => b.n - a.n);
+
+    const maxMeetings = Math.max(1, ...amRows.map(r => r.n));
+
+    const monthKeys = [['2026-07', 'July 2026'], ['2026-08', 'August 2026'], ['2026-09', 'September 2026']];
+    const monthMax = Math.max(1, ...monthKeys.map(([k]) => all.filter(m => m.iso.startsWith(k)).length));
+    const months = monthKeys.map(([k, label]) => {
+      const set = all.filter(m => m.iso.startsWith(k));
+      const o = set.filter(m => m.opp === 'Yes').length;
+      return {
+        label,
+        summary: set.length + ' meetings · ' + o + ' opportunities · ' + short(set.filter(m => m.quoteNo).reduce((a, m) => a + m.quoteValue, 0)) + ' quoted',
+        oppPct: Math.round(o / monthMax * 100) + '%',
+        restPct: Math.round((set.length - o) / monthMax * 100) + '%'
+      };
+    });
+
+    const monthAll = all.filter(m => m.iso >= '2026-09-01');
+    const monthOpps = monthAll.filter(m => m.opp === 'Yes');
+    const monthLive = monthAll.filter(m => m.opp !== 'No');
+
+    return {
+      nav: SCREENS.map(s => {
+        const on = screen === s.id || (s.id === 'log' && screen === 'detail');
+        return {
+          label: s.label, go: this.go(s.id),
+          count: s.id === 'log' ? String(all.length) : '',
+          bg: on ? 'rgba(255,255,255,.10)' : 'transparent',
+          fg: on ? '#fff' : 'rgba(255,255,255,.62)',
+          bar: on ? 'var(--nymbis-red)' : 'transparent'
+        };
+      }),
+      eyebrow: screen === 'detail' ? 'Meetings' : (active ? active.eyebrow : ''),
+      title: screen === 'detail' && detail ? detail.customer : (active ? active.title : ''),
+
+      query: st.query,
+      setQuery: (e) => this.setState({ query: e.target.value }),
+
+      isDashboard: screen === 'dashboard',
+      isLog: screen === 'log',
+      isDetail: screen === 'detail',
+      isNew: screen === 'new',
+      isReport: screen === 'report',
+      goLog: this.go('log'),
+      goNew: this.go('new'),
+      goReport: this.go('report'),
+
+      rowPad: (p.density ?? 'comfortable') === 'compact' ? '8px' : '13px',
+
+      stats: [
+        { label: 'Meetings this month', value: String(all.filter(m => m.iso >= '2026-09-01').length), sub: 'Across ' + new Set(all.filter(m => m.iso >= '2026-09-01').map(m => m.am)).size + ' Vox account managers' },
+        { label: 'Opportunities', value: String(monthOpps.length), sub: monthAll.filter(m => m.opp === 'Maybe').length + ' more marked maybe' },
+        { label: 'Possible value', value: short(monthLive.reduce((a, m) => a + m.value, 0)), sub: 'Yes and maybe, before quoting' },
+        { label: 'Quoted value', value: short(monthAll.filter(m => m.quoteNo).reduce((a, m) => a + m.quoteValue, 0)), sub: monthAll.filter(m => m.quoteNo).length + ' Nymbis quotes issued' }
+      ],
+      recent: decorated.slice(0, 5),
+      amBars: amRows.filter(r => r.n > 0).map(r => ({ am: r.am, meetings: r.meetings, pct: Math.round(r.n / maxMeetings * 100) + '%' })),
+      openOpps: decorated.filter(m => m.opp !== 'No' && !m.quoteNo).slice(0, 5),
+
+      log,
+      logCount: log.length + ' of ' + all.length + ' meetings',
+      filters: [
+        chip('All', st.filter === 'All', () => this.setState({ filter: 'All' })),
+        chip('Yes', st.filter === 'Yes', () => this.setState({ filter: 'Yes' })),
+        chip('Maybe', st.filter === 'Maybe', () => this.setState({ filter: 'Maybe' })),
+        chip('No', st.filter === 'No', () => this.setState({ filter: 'No' })),
+        chip('Quoted', st.filter === 'Quoted', () => this.setState({ filter: 'Quoted' }))
+      ],
+      amNames: AMS,
+      amFilter: st.amFilter,
+      setAmFilter: (e) => this.setState({ amFilter: e.target.value }),
+
+      detail: detailFull,
+
+      interests: INTERESTS,
+      form: st.form,
+      setAm: this.setField('am'),
+      setCustomer: this.setField('customer'),
+      setCrm: this.setField('crm'),
+      setDate: this.setField('date'),
+      setTime: this.setField('time'),
+      setInterest: this.setField('interest'),
+      setValue: this.setField('value'),
+      setNotes: this.setField('notes'),
+      valueHelper: st.form.opp === 'No' ? 'Not required when there is no opportunity.' : 'Rough figure is fine. Firms up once a quote is issued.',
+      setQuoteNo: this.setField('quoteNo'),
+      setQuoteValue: this.setField('quoteValue'),
+      oppChoices: ['Yes', 'Maybe', 'No'].map(label => ({
+        label,
+        go: () => this.setState(s => ({ form: { ...s.form, opp: label } })),
+        ...(st.form.opp === label
+          ? { bg: 'var(--nymbis-plum)', fg: '#fff', border: 'var(--nymbis-plum)' }
+          : { bg: '#fff', fg: 'var(--fg-2)', border: 'var(--border-1)' })
+      })),
+      attendeeDraft: st.attendeeDraft,
+      setAttendeeDraft: (e) => this.setState({ attendeeDraft: e.target.value }),
+      attendeeKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addAttendee(); } },
+      addAttendee: this.addAttendee,
+      attendeeChips: st.form.attendees.map((name, i) => ({
+        name,
+        remove: () => this.setState(s => ({ form: { ...s.form, attendees: s.form.attendees.filter((_, j) => j !== i) } }))
+      })),
+      save: this.save,
+
+      period: period.name,
+      periods: PERIODS.map((pd, i) => chip(pd.label, st.period === i, () => this.setState({ period: i }))),
+      reportStats: [
+        { label: 'Meetings', value: String(inPeriod.length), sub: 'Logged with Vox account managers' },
+        { label: 'Opportunities', value: String(opps.length), sub: maybes.length + ' more marked maybe' },
+        { label: 'Possible value', value: short(totalValue), sub: 'Yes and maybe, before quoting' },
+        { label: 'Quotes generated', value: String(quotedSet.length), sub: 'Nymbis quote numbers issued' },
+        { label: 'Quoted value', value: short(quotedValue), sub: 'Firm value quoted through Vox' }
+      ],
+      amRows,
+      totals: {
+        meetings: String(inPeriod.length),
+        opps: String(opps.length),
+        maybes: String(maybes.length),
+        quotes: String(quotedSet.length),
+        value: totalValue ? money(totalValue) : '—',
+        quotedValue: quotedValue ? money(quotedValue) : '—'
+      },
+      months,
+      topOpps: [...quotedSet].sort((a, b) => b.quoteValue - a.quoteValue).slice(0, 5).map(m => ({ customer: m.customer, am: m.am, interest: m.quoteNo, valueLabel: money(m.quoteValue) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
