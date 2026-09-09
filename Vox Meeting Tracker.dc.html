@@ -42,10 +42,10 @@ tbody tr:hover td{background:var(--bg-2)}
         </div>
       </sc-for>
     </div>
-    <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.12)">
-      <span style="width:30px;height:30px;border-radius:999px;flex:none;background:var(--nymbis-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-variation-settings:'wdth' 112,'wght' 700">BA</span>
+    <div onClick="{{ goSettings }}" style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.12);cursor:pointer">
+      <span style="width:30px;height:30px;border-radius:999px;flex:none;background:var(--nymbis-gradient);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-variation-settings:'wdth' 112,'wght' 700">{{ channelManager.initials }}</span>
       <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0">
-        <span style="font-size:12.5px;color:#fff;font-variation-settings:'wdth' 112,'wght' 600">Brendon Atwell</span>
+        <span style="font-size:12.5px;color:#fff;font-variation-settings:'wdth' 112,'wght' 600">{{ channelManager.name }}</span>
         <span style="font-size:11px;color:rgba(255,255,255,.5)">Nymbis channel</span>
       </span>
     </div>
@@ -402,13 +402,67 @@ tbody tr:hover td{background:var(--bg-2)}
         </div>
       </sc-if>
 
+      <sc-if value="{{ isSettings }}">
+        <div data-screen-label="Settings" style="max-width:640px;display:flex;flex-direction:column;gap:20px">
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:28px 30px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Nymbis channel manager</span>
+              <span style="font-size:12.5px;color:var(--fg-2)">Shown in the sidebar as the Nymbis contact on this account.</span>
+            </div>
+            <x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Input" label="Channel manager name" placeholder="Full name" value="{{ settingsForm.channelManagerName }}" on-change="{{ settingsForm.setChannelManagerName }}" hint-size="100%,72px"></x-import>
+          </section>
+
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:28px 30px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Vox account managers</span>
+              <span style="font-size:12.5px;color:var(--fg-2)">Populates the account manager list on the meeting log, filters and reports.</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ amChips }}" as="c" hint-placeholder-count="3">
+                  <span style="display:inline-flex;align-items:center;gap:8px;padding:7px 8px 7px 14px;border-radius:999px;background:var(--bg-3);font-size:13px">
+                    <span>{{ c.name }}</span>
+                    <span onClick="{{ c.remove }}" style="cursor:pointer;width:18px;height:18px;border-radius:999px;background:#fff;color:var(--nymbis-plum);display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1;font-variation-settings:'wdth' 112,'wght' 700">&#215;</span>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                <input value="{{ amSettingsDraft }}" onChange="{{ setAmSettingsDraft }}" onKeyDown="{{ amSettingsKey }}" placeholder="Account manager name — press Enter to add" style="flex:1 1 260px;min-width:0;box-sizing:border-box;font-family:var(--font-sans);font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border-1);background:#fff;color:var(--fg-1)">
+                <span onClick="{{ addAccountManager }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" variant="outline" size="sm" hint-size="auto,34px">Add</x-import></span>
+              </div>
+            </div>
+          </section>
+
+          <div style="display:flex;align-items:center;gap:12px">
+            <span onClick="{{ saveSettings }}"><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Button" hint-size="auto,44px">Save settings</x-import></span>
+            <span style="font-size:12.5px;color:var(--fg-3)">{{ settingsStatus }}</span>
+          </div>
+        </div>
+      </sc-if>
+
     </div>
   </main>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;'comfortable'|'compact'&quot;,&quot;section&quot;:&quot;Tables&quot;}}">
-const AMS = ['Account Manager'];
 const INTERESTS = ['Backup and recovery', 'Disaster recovery', 'Cloud compute', 'Object storage', 'Data centre hosting', 'Microsoft 365 backup'];
+
+const SETTINGS_KEY = 'voxResellerTracker.settings.v1';
+const DEFAULT_SETTINGS = { channelManagerName: 'Brendon Atwell', accountManagers: ['Account Manager'] };
+const loadSettings = () => {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return DEFAULT_SETTINGS;
+    const parsed = JSON.parse(raw);
+    return {
+      channelManagerName: typeof parsed.channelManagerName === 'string' ? parsed.channelManagerName : DEFAULT_SETTINGS.channelManagerName,
+      accountManagers: Array.isArray(parsed.accountManagers) ? parsed.accountManagers : DEFAULT_SETTINGS.accountManagers
+    };
+  } catch (err) {
+    return DEFAULT_SETTINGS;
+  }
+};
+const INITIAL_SETTINGS = loadSettings();
 
 const initials = (name) => name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 const person = (name, role) => ({ name, role, initials: initials(name) });
@@ -428,7 +482,8 @@ const SCREENS = [
   { id: 'dashboard', label: 'Dashboard', eyebrow: 'Vox reseller desk', title: 'Overview' },
   { id: 'log', label: 'Meeting log', eyebrow: 'Meetings', title: 'Meeting log' },
   { id: 'new', label: 'Log a meeting', eyebrow: 'Meetings', title: 'Log a meeting' },
-  { id: 'report', label: 'Management report', eyebrow: 'Vox management', title: 'Joint activity report' }
+  { id: 'report', label: 'Management report', eyebrow: 'Vox management', title: 'Joint activity report' },
+  { id: 'settings', label: 'Settings', eyebrow: 'Vox reseller desk', title: 'Settings' }
 ];
 
 const money = (n) => 'R ' + Math.round(n).toLocaleString('en-ZA').replace(/,/g, ' ');
@@ -444,7 +499,11 @@ class Component extends DCLogic {
     period: 1,
     extra: [],
     attendeeDraft: '',
-    form: { am: 'Account Manager', customer: '', crm: '', date: '2026-09-09', time: '10:00', interest: 'Backup and recovery', opp: 'Yes', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
+    channelManagerName: INITIAL_SETTINGS.channelManagerName,
+    accountManagers: INITIAL_SETTINGS.accountManagers,
+    amSettingsDraft: '',
+    settingsDirty: false,
+    form: { am: INITIAL_SETTINGS.accountManagers[0] || '', customer: '', crm: '', date: '2026-09-09', time: '10:00', interest: 'Backup and recovery', opp: 'Yes', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
   };
 
   go = (screen) => () => this.setState({ screen });
@@ -455,6 +514,33 @@ class Component extends DCLogic {
     const v = this.state.attendeeDraft.trim();
     if (!v) return;
     this.setState(s => ({ attendeeDraft: '', form: { ...s.form, attendees: [...s.form.attendees, v] } }));
+  };
+
+  setChannelManagerName = (e) => this.setState({ channelManagerName: e.target.value, settingsDirty: true });
+  setAmSettingsDraft = (e) => this.setState({ amSettingsDraft: e.target.value });
+  amSettingsKey = (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addAccountManager(); } };
+
+  addAccountManager = () => {
+    const v = this.state.amSettingsDraft.trim();
+    if (!v || this.state.accountManagers.includes(v)) { this.setState({ amSettingsDraft: '' }); return; }
+    this.setState(s => ({ accountManagers: [...s.accountManagers, v], amSettingsDraft: '', settingsDirty: true }));
+  };
+
+  removeAccountManager = (name) => () => {
+    this.setState(s => ({ accountManagers: s.accountManagers.filter(a => a !== name), settingsDirty: true }));
+  };
+
+  saveSettings = () => {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+        channelManagerName: this.state.channelManagerName,
+        accountManagers: this.state.accountManagers
+      }));
+    } catch (err) {
+      // Storage unavailable (private browsing, sandboxed iframe) — settings still
+      // apply for this session, they just won't survive a refresh.
+    }
+    this.setState({ settingsDirty: false });
   };
 
   save = () => {
@@ -539,7 +625,7 @@ class Component extends DCLogic {
     const totalValue = inPeriod.filter(m => m.opp !== 'No').reduce((a, m) => a + m.value, 0);
     const quotedValue = quotedSet.reduce((a, m) => a + m.quoteValue, 0);
 
-    const amRows = AMS.map(am => {
+    const amRows = st.accountManagers.map(am => {
       const mine = inPeriod.filter(m => m.am === am);
       const o = mine.filter(m => m.opp === 'Yes');
       const mb = mine.filter(m => m.opp === 'Maybe');
@@ -596,9 +682,13 @@ class Component extends DCLogic {
       isDetail: screen === 'detail',
       isNew: screen === 'new',
       isReport: screen === 'report',
+      isSettings: screen === 'settings',
       goLog: this.go('log'),
       goNew: this.go('new'),
       goReport: this.go('report'),
+      goSettings: this.go('settings'),
+
+      channelManager: { name: st.channelManagerName, initials: initials(st.channelManagerName || '') },
 
       rowPad: (p.density ?? 'comfortable') === 'compact' ? '8px' : '13px',
 
@@ -621,7 +711,7 @@ class Component extends DCLogic {
         chip('No', st.filter === 'No', () => this.setState({ filter: 'No' })),
         chip('Quoted', st.filter === 'Quoted', () => this.setState({ filter: 'Quoted' }))
       ],
-      amNames: AMS,
+      amNames: st.accountManagers,
       amFilter: st.amFilter,
       setAmFilter: (e) => this.setState({ amFilter: e.target.value }),
 
@@ -676,7 +766,16 @@ class Component extends DCLogic {
         quotedValue: quotedValue ? money(quotedValue) : '—'
       },
       months,
-      topOpps: [...quotedSet].sort((a, b) => b.quoteValue - a.quoteValue).slice(0, 5).map(m => ({ customer: m.customer, am: m.am, interest: m.quoteNo, valueLabel: money(m.quoteValue) }))
+      topOpps: [...quotedSet].sort((a, b) => b.quoteValue - a.quoteValue).slice(0, 5).map(m => ({ customer: m.customer, am: m.am, interest: m.quoteNo, valueLabel: money(m.quoteValue) })),
+
+      settingsForm: { channelManagerName: st.channelManagerName, setChannelManagerName: this.setChannelManagerName },
+      amChips: st.accountManagers.map(name => ({ name, remove: this.removeAccountManager(name) })),
+      amSettingsDraft: st.amSettingsDraft,
+      setAmSettingsDraft: this.setAmSettingsDraft,
+      amSettingsKey: this.amSettingsKey,
+      addAccountManager: this.addAccountManager,
+      saveSettings: this.saveSettings,
+      settingsStatus: st.settingsDirty ? 'Unsaved changes' : 'All changes saved to this browser'
     };
   }
 }
