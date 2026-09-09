@@ -407,111 +407,13 @@ tbody tr:hover td{background:var(--bg-2)}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;'comfortable'|'compact'&quot;,&quot;section&quot;:&quot;Tables&quot;}}">
-const AMS = ['Lerato Dlamini', 'Andre Kruger', 'Nomvula Zulu', 'Ryan Pillay', 'Chantelle Meyer'];
+const AMS = ['Account Manager'];
 const INTERESTS = ['Backup and recovery', 'Disaster recovery', 'Cloud compute', 'Object storage', 'Data centre hosting', 'Microsoft 365 backup'];
 
 const initials = (name) => name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 const person = (name, role) => ({ name, role, initials: initials(name) });
 
-const MEETINGS = [
-  { id: 'v1', iso: '2026-09-08', date: '08 Sep 2026', time: '10:00', am: 'Lerato Dlamini', customer: 'Kloof Foods', crm: 'TSK-448291',
-    opp: 'Yes', value: 218400, quoteNo: 'NQ-2418', quoteValue: 218400, interest: 'Backup and recovery', channel: 'On site, Century City',
-    attendees: [person('Marc Delport', 'IT director, Kloof Foods'), person('Lerato Dlamini', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
-    notes: [
-      'Kloof Foods run 34 workloads across two sites and currently back up to tape. Marc wants a hosted Veeam tenancy with a four-hour restore target and a single monthly invoice through Vox.',
-      'They will not consider a full disaster-recovery build this year, but asked us to price the backup piece as if DR follows in the new financial year.'
-    ],
-    next: [{ text: 'Nymbis to send a sized backup proposal through Vox', owner: 'Nymbis' }, { text: 'Lerato to confirm the billing entity with Kloof finance', owner: 'Vox' }] },
-  { id: 'v2', iso: '2026-09-04', date: '04 Sep 2026', time: '14:30', am: 'Andre Kruger', customer: 'Aurum Mining', crm: 'TSK-447903',
-    opp: 'Yes', value: 486000, quoteNo: '', quoteValue: 0, interest: 'Data centre hosting',
-    channel: 'Teams call',
-    attendees: [person('Susan Naidoo', 'Head of infrastructure, Aurum Mining'), person('Pieter Grobler', 'Network lead, Aurum Mining'), person('Andre Kruger', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
-    notes: [
-      'Aurum are exiting their own server room by March and need hosting for 14 racks with dual-path power. Susan is comparing three providers, Vox included.',
-      'Their decision criteria are power redundancy, cross-connect options and a South African data residency commitment in writing.'
-    ],
-    next: [{ text: 'Nymbis to supply data centre facility pack and residency letter', owner: 'Nymbis' }, { text: 'Site visit to be booked for the week of 22 September', owner: 'Vox' }] },
-  { id: 'v3', iso: '2026-09-02', date: '02 Sep 2026', time: '09:00', am: 'Nomvula Zulu', customer: 'Cape Union Freight', crm: 'TSK-447688',
-    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Cloud compute', channel: 'Teams call',
-    attendees: [person('Riaan Louw', 'IT manager, Cape Union Freight'), person('Nomvula Zulu', 'Account manager, Vox')],
-    notes: [
-      'Introductory call. Cape Union Freight moved to a competitor platform six months ago and are locked in for two years.',
-      'Riaan was open to a conversation closer to renewal. No opportunity to log now.'
-    ],
-    next: [{ text: 'Diarise a follow-up for June 2027', owner: 'Vox' }] },
-  { id: 'v4', iso: '2026-08-27', date: '27 Aug 2026', time: '11:00', am: 'Lerato Dlamini', customer: 'Sanlow Insurance', crm: 'TSK-447102',
-    opp: 'Yes', value: 132750, quoteNo: 'NQ-2431', quoteValue: 129900, interest: 'Microsoft 365 backup', channel: 'On site, Sandton',
-    attendees: [person('Ayanda Mthembu', 'CISO, Sanlow Insurance'), person('Lerato Dlamini', 'Account manager, Vox'), person('Thandi Mokoena', 'Channel manager, Nymbis')],
-    notes: [
-      'Sanlow need immutable Microsoft 365 backup for 240 seats to satisfy an audit finding. The audit response is due end November, so the timeline is firm.',
-      'Ayanda asked specifically about retention beyond seven years and whether backups stay in South Africa.'
-    ],
-    next: [{ text: 'Quote 240 seats with 7-year retention', owner: 'Nymbis' }] },
-  { id: 'v5', iso: '2026-08-21', date: '21 Aug 2026', time: '15:00', am: 'Ryan Pillay', customer: 'Highveld Logistics', crm: 'TSK-446840',
-    opp: 'Maybe', value: 96500, quoteNo: '', quoteValue: 0, interest: 'Disaster recovery', channel: 'Teams call',
-    attendees: [person('Dumisani Khumalo', 'Operations director, Highveld Logistics'), person('Ryan Pillay', 'Account manager, Vox')],
-    notes: [
-      'Highveld lost half a day of despatch operations to a power event in July. Dumisani now has board attention and a budget line for disaster recovery.',
-      'Eight virtual machines in scope, four-hour recovery objective.'
-    ],
-    next: [{ text: 'Scope a DR runbook workshop with the Nymbis engineer', owner: 'Nymbis' }] },
-  { id: 'v6', iso: '2026-08-19', date: '19 Aug 2026', time: '08:30', am: 'Chantelle Meyer', customer: 'Belmont Health', crm: 'TSK-446715',
-    opp: 'Yes', value: 61440, quoteNo: 'NQ-2429', quoteValue: 63200, interest: 'Backup and recovery', channel: 'On site, Durban',
-    attendees: [person('Fatima Ismail', 'Practice manager, Belmont Health'), person('Chantelle Meyer', 'Account manager, Vox'), person('Dylan Nkosi', 'Solutions architect, Nymbis')],
-    notes: [
-      'Belmont run a group of six practices on a shared patient records system. Their concern is a two-hour restore expectation on the records database.',
-      'Fatima will need the medical data handling assurances in the proposal.'
-    ],
-    next: [{ text: 'Include POPIA data handling annexure with the quote', owner: 'Nymbis' }] },
-  { id: 'v7', iso: '2026-08-14', date: '14 Aug 2026', time: '13:00', am: 'Andre Kruger', customer: 'Rondebosch Academy', crm: 'TSK-446402',
-    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Object storage', channel: 'Teams call',
-    attendees: [person('Grant Peters', 'IT coordinator, Rondebosch Academy'), person('Andre Kruger', 'Account manager, Vox')],
-    notes: [
-      'Exploratory. The academy has a media archive of roughly 40 TB but no budget approved until the next school year.',
-      'Useful context for later, nothing to quote.'
-    ],
-    next: [{ text: 'Revisit in the first term of 2027', owner: 'Vox' }] },
-  { id: 'v8', iso: '2026-08-11', date: '11 Aug 2026', time: '10:30', am: 'Nomvula Zulu', customer: 'Tsogo Retail Group', crm: 'TSK-446188',
-    opp: 'Maybe', value: 274600, quoteNo: '', quoteValue: 0, interest: 'Cloud compute', channel: 'On site, Pretoria',
-    attendees: [person('Sipho Dube', 'Solutions architect, Tsogo Retail Group'), person('Keshia Naicker', 'Head of IT, Tsogo Retail Group'), person('Nomvula Zulu', 'Account manager, Vox'), person('Dylan Nkosi', 'Solutions architect, Nymbis')],
-    notes: [
-      'Tsogo want a hybrid model: point-of-sale stays on premise, everything else moves to hosted compute. 42 workloads in the first wave.',
-      'Sipho needs the network path confirmed before we can size the interconnect.'
-    ],
-    next: [{ text: 'Produce a hybrid reference architecture', owner: 'Nymbis' }, { text: 'Confirm interconnect options at store level', owner: 'Vox' }] },
-  { id: 'v9', iso: '2026-07-30', date: '30 Jul 2026', time: '09:30', am: 'Ryan Pillay', customer: 'Delta Steel', crm: 'TSK-445790',
-    opp: 'Yes', value: 158200, quoteNo: 'NQ-2402', quoteValue: 161500, interest: 'Disaster recovery', channel: 'Teams call',
-    attendees: [person('Willem Botha', 'Group IT manager, Delta Steel'), person('Ryan Pillay', 'Account manager, Vox')],
-    notes: [
-      'Delta Steel have an ageing secondary site and would rather pay for hosted DR than refresh the hardware.',
-      'Willem asked for a three-year cost comparison against a hardware refresh.'
-    ],
-    next: [{ text: 'Build three-year cost comparison', owner: 'Nymbis' }] },
-  { id: 'v10', iso: '2026-07-24', date: '24 Jul 2026', time: '14:00', am: 'Chantelle Meyer', customer: 'Marico Agri', crm: 'TSK-445533',
-    opp: 'No', value: 0, quoteNo: '', quoteValue: 0, interest: 'Backup and recovery', channel: 'On site, Bloemfontein',
-    attendees: [person('Anton Steyn', 'Owner, Marico Agri'), person('Chantelle Meyer', 'Account manager, Vox')],
-    notes: [
-      'Small environment, four servers, already covered by an existing arrangement with their local IT provider.',
-      'Anton was clear there is no change planned. Logged for completeness.'
-    ],
-    next: [] },
-  { id: 'v11', iso: '2026-07-16', date: '16 Jul 2026', time: '11:30', am: 'Lerato Dlamini', customer: 'Zenith Legal', crm: 'TSK-445201',
-    opp: 'Yes', value: 46900, quoteNo: 'NQ-2395', quoteValue: 46900, interest: 'Microsoft 365 backup', channel: 'Teams call',
-    attendees: [person('Nadia Roux', 'Practice administrator, Zenith Legal'), person('Lerato Dlamini', 'Account manager, Vox')],
-    notes: [
-      'Sixty seats, straightforward Microsoft 365 backup requirement driven by their professional indemnity insurer.',
-      'Nadia wants a fixed monthly figure with no setup fee.'
-    ],
-    next: [{ text: 'Quote 60 seats, no setup fee', owner: 'Nymbis' }] },
-  { id: 'v12', iso: '2026-07-09', date: '09 Jul 2026', time: '16:00', am: 'Andre Kruger', customer: 'Coastal Media', crm: 'TSK-444988',
-    opp: 'Yes', value: 52000, quoteNo: 'NQ-2388', quoteValue: 52000, interest: 'Object storage', channel: 'Teams call',
-    attendees: [person('Thabo Molefe', 'Post-production lead, Coastal Media'), person('Andre Kruger', 'Account manager, Vox')],
-    notes: [
-      'Coastal Media need 40 TB of object storage for finished project archives, growing about 2 TB a month.',
-      'Retrieval is rare but must complete inside 24 hours.'
-    ],
-    next: [{ text: 'Quote 40 TB with a growth schedule', owner: 'Nymbis' }] }
-];
+const MEETINGS = [];
 
 const OPP_TONE = { Yes: 'healthy', Maybe: 'atRisk', No: 'neutral' };
 const OPP_LABEL = { Yes: 'Opportunity', Maybe: 'Maybe', No: 'No opportunity' };
@@ -535,14 +437,14 @@ const short = (n) => n >= 1000000 ? 'R ' + (n / 1000000).toFixed(1) + 'm' : n >=
 class Component extends DCLogic {
   state = {
     screen: 'dashboard',
-    id: 'v1',
+    id: '',
     query: '',
     filter: 'All',
     amFilter: 'All account managers',
     period: 1,
     extra: [],
     attendeeDraft: '',
-    form: { am: 'Lerato Dlamini', customer: '', crm: '', date: '2026-09-09', time: '10:00', interest: 'Backup and recovery', opp: 'Yes', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
+    form: { am: 'Account Manager', customer: '', crm: '', date: '2026-09-09', time: '10:00', interest: 'Backup and recovery', opp: 'Yes', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
   };
 
   go = (screen) => () => this.setState({ screen });
