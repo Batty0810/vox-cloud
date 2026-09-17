@@ -79,61 +79,59 @@ tbody tr:hover td{background:var(--bg-2)}
             </sc-for>
           </div>
 
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;align-items:start">
-            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 22px 14px">
-                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Latest meetings</span>
-                <a href="#" onClick="{{ goLog }}" style="font-size:12.5px">Full log</a>
+          <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 22px 14px">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Latest meetings</span>
+              <a href="#" onClick="{{ goLog }}" style="font-size:12.5px">Full log</a>
+            </div>
+            <div style="padding:0 8px 12px;overflow-x:auto">
+              <table style="min-width:780px">
+                <thead><tr><th>Date</th><th>Account manager</th><th>Customer</th><th>Opportunity</th><th>Nymbis quote</th><th>Quoted value</th></tr></thead>
+                <tbody>
+                  <sc-for list="{{ recent }}" as="m" hint-placeholder-count="5">
+                    <tr onClick="{{ m.open }}" style="cursor:pointer">
+                      <td style="color:var(--fg-2);font-feature-settings:'tnum' 1">{{ m.date }}</td>
+                      <td style="font-variation-settings:'wdth' 112,'wght' 600">{{ m.am }}</td>
+                      <td style="color:var(--fg-2)">{{ m.customer }}</td>
+                      <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.oppTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.oppLabel }}</x-import></td>
+                      <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700">{{ m.quoteNoLabel }}</td>
+                      <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ m.quoteValueLabel }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px;align-items:start">
+            <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Activity by account manager</span>
+                <a href="#" onClick="{{ goReport }}" style="font-size:12.5px">Report</a>
               </div>
-              <div style="padding:0 8px 12px;overflow-x:auto">
-                <table style="min-width:780px">
-                  <thead><tr><th>Date</th><th>Account manager</th><th>Customer</th><th>Opportunity</th><th>Nymbis quote</th><th>Quoted value</th></tr></thead>
-                  <tbody>
-                    <sc-for list="{{ recent }}" as="m" hint-placeholder-count="5">
-                      <tr onClick="{{ m.open }}" style="cursor:pointer">
-                        <td style="color:var(--fg-2);font-feature-settings:'tnum' 1">{{ m.date }}</td>
-                        <td style="font-variation-settings:'wdth' 112,'wght' 600">{{ m.am }}</td>
-                        <td style="color:var(--fg-2)">{{ m.customer }}</td>
-                        <td><x-import component-from-global-scope="NymbisDesignSystem_bca8fb.Badge" tone="{{ m.oppTone }}" dot="{{ true }}" hint-size="auto,24px">{{ m.oppLabel }}</x-import></td>
-                        <td style="font-feature-settings:'tnum' 1;color:var(--nymbis-plum);font-variation-settings:'wdth' 112,'wght' 700">{{ m.quoteNoLabel }}</td>
-                        <td style="font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ m.quoteValueLabel }}</td>
-                      </tr>
-                    </sc-for>
-                  </tbody>
-                </table>
-              </div>
+              <sc-for list="{{ amBars }}" as="a" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:12px;padding:7px 0">
+                  <span style="width:118px;flex:none;font-size:13px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ a.am }}</span>
+                  <span style="flex:1;min-width:0;height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:block">
+                    <span style="display:block;height:100%;border-radius:999px;background:var(--nymbis-gradient);width:{{ a.pct }}"></span>
+                  </span>
+                  <span style="width:20px;flex:none;text-align:right;font-size:13px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ a.meetings }}</span>
+                </div>
+              </sc-for>
             </section>
 
-            <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
-              <section style="background:#fff;border:1px solid var(--border-1);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:20px 22px">
-                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px">
-                  <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Activity by account manager</span>
-                  <a href="#" onClick="{{ goReport }}" style="font-size:12.5px">Report</a>
-                </div>
-                <sc-for list="{{ amBars }}" as="a" hint-placeholder-count="5">
-                  <div style="display:flex;align-items:center;gap:12px;padding:7px 0">
-                    <span style="width:118px;flex:none;font-size:13px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ a.am }}</span>
-                    <span style="flex:1;min-width:0;height:9px;border-radius:999px;background:var(--bg-3);overflow:hidden;display:block">
-                      <span style="display:block;height:100%;border-radius:999px;background:var(--nymbis-gradient);width:{{ a.pct }}"></span>
-                    </span>
-                    <span style="width:20px;flex:none;text-align:right;font-size:13px;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600">{{ a.meetings }}</span>
+            <section style="background:var(--nymbis-plum-deep);border-radius:var(--radius-lg);padding:20px 22px;color:#fff">
+              <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Awaiting a quote</span>
+              <div style="display:flex;flex-direction:column;gap:2px;margin-top:12px">
+                <sc-for list="{{ openOpps }}" as="o" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.14)">
+                    <span style="flex:1;min-width:0;font-size:13.5px;color:rgba(255,255,255,.92);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ o.customer }}</span>
+                    <span style="font-size:12px;color:rgba(255,255,255,.5);flex:none">{{ o.am }}</span>
+                    <span style="font-size:13.5px;flex:none;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600;color:var(--nymbis-soft-pink)">{{ o.valueLabel }}</span>
                   </div>
                 </sc-for>
-              </section>
-
-              <section style="background:var(--nymbis-plum-deep);border-radius:var(--radius-lg);padding:20px 22px;color:#fff">
-                <span style="font-size:16px;font-variation-settings:'wdth' 112,'wght' 700">Awaiting a quote</span>
-                <div style="display:flex;flex-direction:column;gap:2px;margin-top:12px">
-                  <sc-for list="{{ openOpps }}" as="o" hint-placeholder-count="4">
-                    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.14)">
-                      <span style="flex:1;min-width:0;font-size:13.5px;color:rgba(255,255,255,.92);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ o.customer }}</span>
-                      <span style="font-size:12px;color:rgba(255,255,255,.5);flex:none">{{ o.am }}</span>
-                      <span style="font-size:13.5px;flex:none;font-feature-settings:'tnum' 1;font-variation-settings:'wdth' 112,'wght' 600;color:var(--nymbis-soft-pink)">{{ o.valueLabel }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </section>
-            </div>
+              </div>
+            </section>
           </div>
         </div>
       </sc-if>
