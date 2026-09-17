@@ -462,6 +462,19 @@ const loadSettings = () => {
 };
 const INITIAL_SETTINGS = loadSettings();
 
+const MEETINGS_KEY = 'voxResellerTracker.meetings.v1';
+const loadMeetings = () => {
+  try {
+    const raw = localStorage.getItem(MEETINGS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    return [];
+  }
+};
+const INITIAL_MEETINGS = loadMeetings();
+
 const initials = (name) => name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 const person = (name, role) => ({ name, role, initials: initials(name) });
 
@@ -495,7 +508,7 @@ class Component extends DCLogic {
     filter: 'All',
     amFilter: 'All account managers',
     period: 1,
-    extra: [],
+    extra: INITIAL_MEETINGS,
     attendeeDraft: '',
     channelManagerName: INITIAL_SETTINGS.channelManagerName,
     accountManagers: INITIAL_SETTINGS.accountManagers,
@@ -559,8 +572,15 @@ class Component extends DCLogic {
       notes: f.notes ? f.notes.split('\n').filter(Boolean) : ['No notes recorded.'],
       next: []
     };
+    const extra = [m, ...this.state.extra];
+    try {
+      localStorage.setItem(MEETINGS_KEY, JSON.stringify(extra));
+    } catch (err) {
+      // Storage unavailable (private browsing, sandboxed iframe) — meeting still
+      // shows for this session, it just won't survive a refresh.
+    }
     this.setState(s => ({
-      extra: [m, ...s.extra], screen: 'log',
+      extra, screen: 'log',
       form: { ...s.form, customer: '', crm: '', value: '', quoteNo: '', quoteValue: '', notes: '', attendees: [] }
     }));
   };
